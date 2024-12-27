@@ -6,6 +6,7 @@ import config from '../config'
 import tokenVerifier from '../data/tokenVerification'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../authentication/clientCredentials'
+import logger from '../../logger'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -57,6 +58,7 @@ export default function setupAuthentication() {
 
   const authUrl = config.apis.hmppsAuth.externalUrl
   const authParameters = `client_id=${config.apis.hmppsAuth.authClientId}&redirect_uri=${config.ingressUrl}`
+  if (!config.apis.tokenVerification.enabled) logger.warn('Token verification is disabled')
 
   router.use('/sign-out', (req, res, next) => {
     const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`

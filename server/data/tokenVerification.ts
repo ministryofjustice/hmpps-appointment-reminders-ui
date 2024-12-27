@@ -20,14 +20,7 @@ export type TokenVerifier = (request: Request) => Promise<boolean | void>
 const tokenVerifier: TokenVerifier = async request => {
   const { user, verified } = request
 
-  if (!config.apis.tokenVerification.enabled) {
-    logger.debug('Token verification disabled, returning token is valid')
-    return true
-  }
-
-  if (verified) {
-    return true
-  }
+  if (verified || !config.apis.tokenVerification.enabled) return true
 
   logger.debug(`token request for user "${user.username}'`)
 

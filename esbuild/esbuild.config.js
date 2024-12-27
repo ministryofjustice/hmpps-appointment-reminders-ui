@@ -65,13 +65,6 @@ const main = () => {
       serverProcess = spawn('node', ['--env-file=.env', 'dist/server.js'], { stdio: 'inherit' })
     })
   }
-  if (args.includes('--dev-test-server')) {
-    let serverProcess = null
-    chokidar.watch(['dist']).on('all', () => {
-      if (serverProcess) serverProcess.kill()
-      serverProcess = spawn('node', ['--env-file=feature.env', 'dist/server.js'], { stdio: 'inherit' })
-    })
-  }
 
   if (args.includes('--watch')) {
     process.stderr.write('\u{1b}[1m\u{1F52D} Watching for changes...\u{1b}[0m\n')

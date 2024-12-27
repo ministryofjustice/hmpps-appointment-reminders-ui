@@ -1,21 +1,19 @@
 generic-service:
-  nameOverride: hmpps-template-typescript
-  productId: 'UNASSIGNED' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
-
-  # the IRSA service account name for accessing AWS resources
-  # serviceAccountName: "hmpps-template-typescript"
+  nameOverride: hmpps-appointment-reminders-ui
+  serviceAccountName: hmpps-appointment-reminders-ui
+  productId: HMPPS518
 
   replicaCount: 4
 
   image:
-    repository: ghcr.io/ministryofjustice/hmpps-template-typescript
+    repository: ghcr.io/ministryofjustice/hmpps-appointment-reminders-ui
     tag: app_version # override at deployment time
     port: 3000
 
   ingress:
     enabled: true
     host: app-hostname.local # override per environment
-    tlsSecretName: hmpps-template-typescript-cert
+    tlsSecretName: hmpps-appointment-reminders-ui-cert
 
   livenessProbe:
     httpGet:
@@ -32,15 +30,11 @@ generic-service:
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'
     AUDIT_SQS_REGION: 'eu-west-2'
-    AUDIT_SERVICE_NAME: 'UNASSIGNED' # Your audit service name
+    AUDIT_SERVICE_NAME: 'hmpps-appointment-reminders-ui' # Your audit service name
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
-  # namespace_secrets:
-  #   [name of kubernetes secret]:
-  #     [name of environment variable as seen by app]: [key of kubernetes secret to load]
-
   namespace_secrets:
-    hmpps-template-typescript:
+    hmpps-appointment-reminders-ui:
       AUTH_CODE_CLIENT_ID: 'AUTH_CODE_CLIENT_ID'
       AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'
       CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
@@ -61,4 +55,4 @@ generic-service:
       - internal
 
 generic-prometheus-alerts:
-  targetApplication: hmpps-template-typescript
+  targetApplication: hmpps-appointment-reminders-ui

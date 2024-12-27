@@ -1,17 +1,16 @@
 {
-  "name": "hmpps-template-typescript",
+  "name": "hmpps-appointment-reminders-ui",
   "version": "0.0.1",
-  "description": "HMPPS Typescript Template",
-  "repository": "git@github.com:ministryofjustice/hmpps-template-typescript.git",
+  "description": "Appointment Reminders",
+  "repository": "git@github.com:ministryofjustice/hmpps-appointment-reminders-ui.git",
   "license": "MIT",
   "scripts": {
     "prepare": "husky",
-    "watch-ts": "tsc -w",
     "build": "node esbuild/esbuild.config.js --build",
-    "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
-    "start:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js --build --watch\" \"node esbuild/esbuild.config.js --dev-server\"",
-    "start-feature": " node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
-    "start-feature:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js  --build --watch \" \"node esbuild/esbuild.config.js --dev-test-server\"",
+    "build:watch": "node esbuild/esbuild.config.js --build --watch",
+    "start": "node esbuild/esbuild.config.js --dev-server",
+    "start:dev": "concurrently -k -n 'Build,Server,WireMock' 'npm run build:watch' 'npm run start' 'npm run wiremock'",
+    "wiremock": "wiremock --port 9090 --root-dir wiremock --local-response-templating",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests",
@@ -145,6 +144,7 @@
     "prettier-plugin-jinja-template": "^2.0.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "wiremock": "^3.10.0"
   }
 }
