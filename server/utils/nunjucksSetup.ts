@@ -3,7 +3,9 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { DateTimeFormatter, TemporalAccessor, ZonedDateTime } from '@js-joda/core'
+import { Locale } from '@js-joda/locale_en'
+import { dateTimeFormatter, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 
@@ -39,4 +41,8 @@ export default function nunjucksSetup(app: express.Express): void {
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('formatDate', (date: TemporalAccessor, pattern?: string) =>
+    (pattern ? DateTimeFormatter.ofPattern(pattern) : dateTimeFormatter).withLocale(Locale.ENGLISH).format(date),
+  )
+  njkEnv.addFilter('parseDate', (dateString: string) => ZonedDateTime.parse(dateString))
 }

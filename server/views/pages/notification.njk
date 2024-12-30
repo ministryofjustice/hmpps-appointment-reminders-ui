@@ -1,0 +1,46 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "moj/components/messages/macro.njk" import mojMessages %}
+
+{% set pageTitle = applicationName + " - Text message" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  {{ govukBackLink({ text: "Back", href: "/" }) }}
+  <h1 class="govuk-heading-l">Text message</h1>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body">
+        '{{ templateName }}' was sent to {{ notification.phone_number }}.
+      </p>
+    </div>
+    <div class="govuk-grid-column-one-half-from-desktop">
+      <time datetime="{{ notification.sent_at }}"
+            class="moj-message-list__date">{{ notification.sent_at | parseDate | formatDate('eeee, d MMMM yyyy') }}</time>
+      <div class="moj-message-item moj-message-item--sent govuk-!-width-auto">
+        <div class="moj-message-item__text moj-message-item__text--sent">{{ notification.body }}</div>
+        <div class="moj-message-item__meta">
+          <span class="moj-message-item__meta--sender">GOVUK</span> at
+          <time class="moj-message-item__meta--timestamp"
+                datetime="{{ notification.sent_at }}">{{ notification.sent_at | parseDate | formatDate('HH:mma') }}</time>
+        </div>
+      </div>
+      <div class="govuk-!-width-full govuk-!-text-align-right secondary-text">{{ notification.status }}</div>
+
+      {% for previousNotification in previousNotifications %}
+        <time datetime="{{ previousNotification.sent_at }}"
+              class="moj-message-list__date">{{ previousNotification.sent_at | parseDate | formatDate('eeee, d MMMM yyyy') }}</time>
+        <div class="moj-message-item moj-message-item--sent govuk-!-width-auto">
+          <div class="moj-message-item__text moj-message-item__text--sent">{{ previousNotification.body }}</div>
+          <div class="moj-message-item__meta">
+            <span class="moj-message-item__meta--sender">GOVUK</span> at
+            <time class="moj-message-item__meta--timestamp"
+                  datetime="{{ previousNotification.sent_at }}">{{ previousNotification.sent_at | parseDate | formatDate('HH:mma') }}</time>
+          </div>
+        </div>
+        <div class="govuk-!-width-full govuk-!-text-align-right secondary-text">{{ previousNotification.status }}</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/notifications-api/v2/notifications?template_type=sms",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "links": {
+            "current": "http://localhost:9090/notifications-api/v2/notifications?template_type=sms"
+          },
+          "notifications": [
+            {
+              "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now }}",
+              "cost_details": {
+                "billable_sms_fragments": 1,
+                "international_rate_multiplier": 1.0,
+                "sms_rate": 0.0227
+              },
+              "cost_in_pounds": 0.0227,
+              "created_at": "{{ now }}",
+              "id": "00000000-0000-0000-0000-000000000001",
+              "phone_number": "07700900000",
+              "reference": "A000001",
+              "sent_at": "{{ now }}",
+              "status": "delivered",
+              "subject": null,
+              "template": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "uri": "https://api.notifications.service.gov.uk/v2/template/00000000-0000-0000-0000-000000000000/version/1",
+                "version": 1
+              },
+              "type": "sms"
+            },
+            {
+              "body": "Reminder: Dear Test2. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now }}",
+              "cost_details": {
+                "billable_sms_fragments": 1,
+                "international_rate_multiplier": 1.0,
+                "sms_rate": 0.0227
+              },
+              "cost_in_pounds": 0.0227,
+              "created_at": "{{ now }}",
+              "id": "00000000-0000-0000-0000-000000000002",
+              "phone_number": "07700900111",
+              "reference": "A000002",
+              "sent_at": "{{ now }}",
+              "status": "sending",
+              "subject": null,
+              "template": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "uri": "https://api.notifications.service.gov.uk/v2/template/00000000-0000-0000-0000-000000000000/version/1",
+                "version": 1
+              },
+              "type": "sms"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "url": "/notifications-api/v2/notifications/00000000-0000-0000-0000-000000000001",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+          "completed_at": "{{ now }}",
+          "cost_details": {
+            "billable_sms_fragments": 1,
+            "international_rate_multiplier": 1.0,
+            "sms_rate": 0.0227
+          },
+          "cost_in_pounds": 0.0227,
+          "created_at": "{{ now }}",
+          "id": "00000000-0000-0000-0000-000000000001",
+          "phone_number": "07700900000",
+          "reference": "A000001",
+          "sent_at": "{{ now }}",
+          "status": "delivered",
+          "subject": null,
+          "template": {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "uri": "https://api.notifications.service.gov.uk/v2/template/00000000-0000-0000-0000-000000000000/version/1",
+            "version": 1
+          },
+          "type": "sms"
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "url": "/notifications-api/v2/notifications?template_type=sms&reference=A000001&older_than=00000000-0000-0000-0000-000000000001",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "links": {
+            "current": "http://localhost:9090/notifications-api/v2/notifications?template_type=sms&reference=A000001&older_than=00000000-0000-0000-0000-000000000001"
+          },
+          "notifications": [
+            {
+              "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='-5 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now offset='-7 days' }}",
+              "cost_details": {
+                "billable_sms_fragments": 1,
+                "international_rate_multiplier": 1.0,
+                "sms_rate": 0.0227
+              },
+              "cost_in_pounds": 0.0227,
+              "created_at": "{{ now offset='-7 days' }}",
+              "id": "00000000-0000-0000-0000-000000000003",
+              "phone_number": "07700900000",
+              "reference": "A000001",
+              "sent_at": "{{ now offset='-7 days' }}",
+              "status": "delivered",
+              "subject": null,
+              "template": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "uri": "https://api.notifications.service.gov.uk/v2/template/00000000-0000-0000-0000-000000000000/version/1",
+                "version": 1
+              },
+              "type": "sms"
+            },
+            {
+              "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='-12 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now offset='-14 days' }}",
+              "cost_details": {
+                "billable_sms_fragments": 1,
+                "international_rate_multiplier": 1.0,
+                "sms_rate": 0.0227
+              },
+              "cost_in_pounds": 0.0227,
+              "created_at": "{{ now offset='-14 days' }}",
+              "id": "00000000-0000-0000-0000-000000000004",
+              "phone_number": "07700900000",
+              "reference": "A000001",
+              "sent_at": "{{ now offset='-14 days' }}",
+              "status": "delivered",
+              "subject": null,
+              "template": {
+                "id": "00000000-0000-0000-0000-000000000000",
+                "uri": "https://api.notifications.service.gov.uk/v2/template/00000000-0000-0000-0000-000000000000/version/1",
+                "version": 1
+              },
+              "type": "sms"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "url": "/notifications-api/v2/template/00000000-0000-0000-0000-000000000000",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "name": "Unpaid Work Appointment Reminder"
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      }
+    }
+  ]
+}

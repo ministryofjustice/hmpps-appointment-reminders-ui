@@ -1,0 +1,131 @@
+{% extends "../partials/layout.njk" %}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
+{%- from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions -%}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  {{ mojPageHeaderActions({
+    heading: {
+      text: 'Text messages'
+    },
+    items: [{
+      text: 'Download as CSV',
+      classes: 'govuk-button--secondary',
+      href: '/csv'
+    }, {
+      text: 'Send a reminder',
+      classes: 'govuk-button',
+      href: '/send/find-a-person'
+    }]
+  }) }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      {%- set filterOptionsHtml %}
+        <div class="govuk-form-group">
+          {{ mojDatePicker({
+            id: "date",
+            name: "date",
+            label: { text: "Date", classes: "govuk-label--s" },
+            value: filters.date | formatDate('dd/MM/yyyy')
+          }) }}
+        </div>
+
+        {{ govukInput({
+          id: 'keywords',
+          name: 'keywords',
+          label: {
+            text: 'Keywords',
+            classes: 'govuk-label--s'
+          },
+          value: filters.keywords
+        }) }}
+
+        {{ govukCheckboxes({
+          idPrefix: 'template',
+          name: 'template',
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: 'Template',
+              classes: 'govuk-fieldset__legend--s'
+            }
+          },
+          items: availableTemplates
+        }) if availableTemplates | length > 0 }}
+
+        {{ govukCheckboxes({
+          idPrefix: 'status',
+          name: 'status',
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: 'Status',
+              classes: 'govuk-fieldset__legend--s'
+            }
+          },
+          items: availableStatuses
+        }) if availableStatuses | length > 0 }}
+
+        {{ govukCheckboxes({
+          idPrefix: 'provider',
+          name: 'provider',
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: 'Provider',
+              classes: 'govuk-fieldset__legend--s'
+            }
+          },
+          items: [
+            {
+              value: 'N07',
+              text: 'London (23)'
+            },
+            {
+              value: 'N56',
+              text: 'East of England (18)'
+            }
+          ]
+        }) }}
+      {% endset -%}
+
+      <form>
+        {{ mojFilter({
+          heading: { text: 'Filters' },
+          submit: { attributes: { id: "apply-filters-button" } },
+          selectedFilters: null if(categories | length === 0) else {
+            heading: { text: 'Selected filters'},
+            clearLink: { text: 'Clear', href: '/' },
+            categories: categories
+          },
+          optionsHtml: filterOptionsHtml
+        }) }}
+      </form>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+      {% if results | length === 0 %}
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            No results. Try adjusting the filters or selecting a different date.
+          </strong>
+        </div>
+      {% else %}
+        <p class="govuk-body" id="result-count">Showing {{ results | length }} result{{ 's' if results | length != 1 }}.</p>
+        {{ govukTable({
+          head: headers,
+          rows: results
+        }) }}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
