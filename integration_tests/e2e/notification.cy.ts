@@ -7,6 +7,6 @@ context('Notification page', () => {
   it('can navigate back to list screen', () => {
     cy.visit('/notification/00000000-0000-0000-0000-000000000001')
     cy.get('a.govuk-back-link').click()
-    cy.get('h1').should('have.text', 'Text messages')
+    cy.get('h1').should('have.text', 'Sent reminders')
   })
 })
