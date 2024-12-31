@@ -2,11 +2,11 @@ import { Request, Router } from 'express'
 import { Notification, NotifyClient } from 'notifications-node-client'
 
 import { DateTimeFormatter, LocalDate, ZonedDateTime } from '@js-joda/core'
-import { ParsedQs } from 'qs'
+import { Parser } from '@json2csv/plainjs'
 import type { Services } from '../services'
 import config from '../config'
 import { convertToTitleCase, dateTimeFormatter, groupByCount } from '../utils/utils'
-import { removeURLParameter } from '../utils/url'
+import { asArray, removeURLParameter } from '../utils/url'
 
 const notifyClient: NotifyClient = config.notify.customUrl
   ? new NotifyClient(config.notify.customUrl, config.notify.apiKey)
@@ -18,20 +18,21 @@ export default function routes({ auditService }: Services): Router {
   router.get('/', async (req, res, next) => {
     await auditService.logPageView('HOME_PAGE', { who: res.locals.user.username, correlationId: req.id })
 
-    const filters = {
+    const filters: Filters = {
       date: req.query.date
         ? LocalDate.parse(req.query.date as string, DateTimeFormatter.ofPattern('d/M/yyyy'))
         : LocalDate.now(),
       keywords: req.query.keywords as string,
       status: asArray(req.query.status),
       template: asArray(req.query.template),
+      provider: asArray(req.query.provider),
     }
     const notifications = await getAllNotifications(filters.date)
-    const { availableTemplates, availableStatuses, categories } = await mapFilters(notifications, filters, req)
+    const availableFilterOptions = await getAvailableFilterOptions(notifications, filters, req)
 
     const headers = [{ text: 'To' }, { text: 'Message' }, { text: 'Status' }]
     const results = notifications
-      .filter(n => filterKeywords(n, filters.keywords))
+      .filter(n => filterByKeywords(n, filters.keywords))
       .filter(n => filters.status.length === 0 || filters.status.includes(n.status))
       .filter(n => filters.template.length === 0 || filters.template.includes(n.template.id))
       .map(n => [
@@ -44,14 +45,21 @@ export default function routes({ auditService }: Services): Router {
         { text: mapStatus(n.status) },
       ])
 
-    res.render('pages/list', {
-      availableStatuses,
-      availableTemplates,
-      filters,
-      categories,
-      headers,
-      results,
+    res.render('pages/list', { availableFilterOptions, filters, headers, results })
+  })
+
+  router.get('/csv', async (req, res, next) => {
+    const date = req.query.date
+      ? LocalDate.parse(req.query.date as string, DateTimeFormatter.ofPattern('d/M/yyyy'))
+      : LocalDate.now()
+    const csvParser = new Parser({
+      fields: ['id', 'reference', 'phone_number', 'body', 'status', 'sent_at', 'completed_at'],
     })
+
+    res
+      .type('text/csv')
+      .attachment(`appointment-reminders-${date.format(DateTimeFormatter.ofPattern('yyyy-MM-dd'))}.csv`)
+      .send(csvParser.parse(await getAllNotifications(date)))
   })
 
   router.get('/notification/:id', async (req, res, next) => {
@@ -87,37 +95,32 @@ async function getAllNotifications(date: LocalDate): Promise<Notification[]> {
   }
 }
 
-function asArray(param: undefined | string | string[] | ParsedQs | ParsedQs[]): string[] {
-  if (param === undefined) return []
-  return Array.isArray(param) ? (param as string[]) : [param as string]
-}
-
 function mapStatus(status: string): string {
   return convertToTitleCase(status).replaceAll('-', ' ')
 }
 
-function filterKeywords(notification: Notification, keywords?: string): boolean {
+function filterByKeywords(notification: Notification, keywords?: string): boolean {
   if (!keywords) return true
   return [notification.phone_number, notification.body, notification.reference, mapStatus(notification.status)].some(
     str => str?.toLowerCase()?.includes(keywords.toLowerCase()),
   )
 }
 
-async function mapFilters(
-  notifications: Notification[],
-  filters: {
-    date: LocalDate
-    status: string[]
-    template: string[]
-    keywords: string
-  },
-  req: Request,
-) {
-  const availableTemplates = await Promise.all(
+async function getAvailableFilterOptions(notifications: Notification[], filters: Filters, req: Request) {
+  const statuses = groupByCount(notifications, n => n.status).map(([status, count]) => {
+    return {
+      description: mapStatus(status),
+      text: `${mapStatus(status)} (${count})`,
+      value: status,
+      checked: filters.status.includes(status),
+    }
+  })
+
+  const templates = await Promise.all(
     groupByCount(notifications, n => n.template.id).map(async ([templateId, count]) => {
       const { name } = (await notifyClient.getTemplateById(templateId)).data
       return {
-        templateName: name,
+        description: name,
         text: `${name} (${count})`,
         value: templateId,
         checked: filters.template.includes(templateId),
@@ -125,32 +128,54 @@ async function mapFilters(
     }),
   )
 
-  const availableStatuses = groupByCount(notifications, n => n.status).map(([status, count]) => {
-    return {
-      text: `${mapStatus(status)} (${count})`,
-      value: status,
-      checked: filters.status.includes(status),
-    }
-  })
+  // hard-coded for now until we support more providers
+  const providers = [
+    {
+      description: 'East of England',
+      text: `East of England (${notifications.length})`,
+      value: 'N56',
+      checked: filters.provider.includes('N56'),
+    },
+  ]
 
-  const categories = []
-  if (filters.status.length > 0)
+  const asCategories: FilterCategory[] = []
+  addCategory(asCategories, filters.status, statuses, 'Status', 'status', req)
+  addCategory(asCategories, filters.template, templates, 'Template', 'template', req)
+  addCategory(asCategories, filters.provider, providers, 'Provider', 'provider', req)
+
+  return { statuses, templates, providers, asCategories }
+}
+
+function addCategory(
+  categories: FilterCategory[],
+  selectedItems: string[],
+  availableItems: { value: string; description: string }[],
+  heading: string,
+  parameterName: string,
+  req: Request,
+) {
+  if (selectedItems.length > 0) {
     categories.push({
-      heading: { text: 'Status' },
-      items: filters.status.map(status => ({
-        text: mapStatus(status),
-        href: removeURLParameter(req, 'status', status),
-      })),
+      heading: { text: heading },
+      items: selectedItems
+        .map(filterValue => ({
+          text: availableItems.find(i => i.value === filterValue)?.description,
+          href: removeURLParameter(req, parameterName, filterValue),
+        }))
+        .filter(i => i.text),
     })
+  }
+}
 
-  if (filters.template.length > 0)
-    categories.push({
-      heading: { text: 'Template' },
-      items: filters.template.map(templateId => ({
-        text: availableTemplates.find(i => i.value === templateId).templateName,
-        href: removeURLParameter(req, 'template', templateId),
-      })),
-    })
+interface Filters {
+  date: LocalDate
+  status: string[]
+  template: string[]
+  provider: string[]
+  keywords: string
+}
 
-  return { availableTemplates, availableStatuses, categories }
+interface FilterCategory {
+  heading: { text: string }
+  items: { text: string; href: string }[]
 }

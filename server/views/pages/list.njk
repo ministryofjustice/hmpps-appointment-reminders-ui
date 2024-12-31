@@ -11,17 +11,11 @@
 
 {% block content %}
   {{ mojPageHeaderActions({
-    heading: {
-      text: 'Text messages'
-    },
+    heading: { text: 'Sent reminders' },
     items: [{
       text: 'Download as CSV',
       classes: 'govuk-button--secondary',
-      href: '/csv'
-    }, {
-      text: 'Send a reminder',
-      classes: 'govuk-button',
-      href: '/send/find-a-person'
+      href: '/csv?date=' + (filters.date | formatDate('dd/MM/yyyy'))
     }]
   }) }}
 
@@ -48,19 +42,6 @@
         }) }}
 
         {{ govukCheckboxes({
-          idPrefix: 'template',
-          name: 'template',
-          classes: "govuk-checkboxes--small",
-          fieldset: {
-            legend: {
-              text: 'Template',
-              classes: 'govuk-fieldset__legend--s'
-            }
-          },
-          items: availableTemplates
-        }) if availableTemplates | length > 0 }}
-
-        {{ govukCheckboxes({
           idPrefix: 'status',
           name: 'status',
           classes: "govuk-checkboxes--small",
@@ -70,8 +51,21 @@
               classes: 'govuk-fieldset__legend--s'
             }
           },
-          items: availableStatuses
-        }) if availableStatuses | length > 0 }}
+          items: availableFilterOptions.statuses
+        }) if availableFilterOptions.statuses | length > 0 }}
+
+        {{ govukCheckboxes({
+          idPrefix: 'template',
+          name: 'template',
+          classes: "govuk-checkboxes--small",
+          fieldset: {
+            legend: {
+              text: 'Template',
+              classes: 'govuk-fieldset__legend--s'
+            }
+          },
+          items: availableFilterOptions.templates
+        }) if availableFilterOptions.templates | length > 0 }}
 
         {{ govukCheckboxes({
           idPrefix: 'provider',
@@ -83,27 +77,18 @@
               classes: 'govuk-fieldset__legend--s'
             }
           },
-          items: [
-            {
-              value: 'N07',
-              text: 'London (23)'
-            },
-            {
-              value: 'N56',
-              text: 'East of England (18)'
-            }
-          ]
-        }) }}
+          items: availableFilterOptions.providers
+        }) if availableFilterOptions.providers | length > 0 }}
       {% endset -%}
 
       <form>
         {{ mojFilter({
           heading: { text: 'Filters' },
           submit: { attributes: { id: "apply-filters-button" } },
-          selectedFilters: null if(categories | length === 0) else {
+          selectedFilters: null if(availableFilterOptions.asCategories | length === 0) else {
             heading: { text: 'Selected filters'},
             clearLink: { text: 'Clear', href: '/' },
-            categories: categories
+            categories: availableFilterOptions.asCategories
           },
           optionsHtml: filterOptionsHtml
         }) }}
