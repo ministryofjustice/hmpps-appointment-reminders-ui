@@ -1,3 +1,6 @@
+import { DateTimeFormatter } from '@js-joda/core'
+import { Locale } from '@js-joda/locale_en'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -21,3 +24,18 @@ export const initialiseName = (fullName?: string): string | null => {
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
+
+export function groupByCount<T>(list: T[], keyFn: (item: T) => string): [string, number][] {
+  return Object.entries(
+    list.reduce(
+      (acc, item) => {
+        const keyValue = keyFn(item)
+        acc[keyValue] = (acc[keyValue] ?? 0) + 1
+        return acc
+      },
+      {} as Record<string, number>,
+    ),
+  ).sort((a, b) => b[1] - a[1])
+}
+
+export const dateTimeFormatter = DateTimeFormatter.ofPattern("eeee, d MMMM 'at' HH:mma").withLocale(Locale.ENGLISH)

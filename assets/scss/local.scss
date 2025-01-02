@@ -1,3 +1,20 @@
 .govuk-main-wrapper {
   min-height: 600px;
 }
+
+.govuk-\!-width-auto {
+  width: auto !important;
+}
+
+.secondary-text {
+  color: $govuk-secondary-text-colour;
+  @include govuk-font-size($size: 16);
+}
+
+.moj-filter__header {
+  display: none;
+}
+
+.moj-filter__options .moj-datepicker input {
+  max-width: none;
+}

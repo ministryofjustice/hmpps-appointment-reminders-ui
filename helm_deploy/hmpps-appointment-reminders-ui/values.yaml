@@ -30,29 +30,32 @@ generic-service:
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'
     AUDIT_SQS_REGION: 'eu-west-2'
-    AUDIT_SERVICE_NAME: 'hmpps-appointment-reminders-ui' # Your audit service name
+    AUDIT_SERVICE_NAME: 'hmpps-appointment-reminders-ui'
+    AUDIT_ENABLED: 'true'
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   namespace_secrets:
-    hmpps-appointment-reminders-ui:
+    hmpps-auth:
       AUTH_CODE_CLIENT_ID: 'AUTH_CODE_CLIENT_ID'
       AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'
       CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
       CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'
-      SESSION_SECRET: 'SESSION_SECRET'
+    govuk-notify:
+      NOTIFY_API_KEY: 'API_KEY'
     elasticache-redis:
+      SESSION_SECRET: 'session_secret'
       REDIS_HOST: 'primary_endpoint_address'
       REDIS_AUTH_TOKEN: 'auth_token'
     application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
-    # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
-    # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
-    # sqs-hmpps-audit-secret:
-    #   AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
 
   allowlist:
     groups:
-      - internal
+      - digital_staff_and_mojo
+      - unilink_staff
+      - probation
 
 generic-prometheus-alerts:
   targetApplication: hmpps-appointment-reminders-ui

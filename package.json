@@ -8,8 +8,9 @@
     "prepare": "husky",
     "build": "node esbuild/esbuild.config.js --build",
     "build:watch": "node esbuild/esbuild.config.js --build --watch",
-    "start": "node esbuild/esbuild.config.js --dev-server",
-    "start:dev": "concurrently -k -n 'Build,Server,WireMock' 'npm run build:watch' 'npm run start' 'npm run wiremock'",
+    "dev-server": "node esbuild/esbuild.config.js --dev-server",
+    "start:dev": "concurrently -k -n 'Build,Server,WireMock' 'npm run build:watch' 'npm run dev-server' 'npm run wiremock'",
+    "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
     "wiremock": "wiremock --port 9090 --root-dir wiremock --local-response-templating",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
@@ -76,8 +77,13 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.709.0",
+    "@js-joda/core": "^5.6.3",
+    "@js-joda/locale": "^4.14.1",
+    "@js-joda/locale_en": "^4.14.0",
+    "@json2csv/plainjs": "^7.0.6",
     "@ministryofjustice/frontend": "^3.2.1",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
+    "@types/qs": "^6.9.17",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",
@@ -87,13 +93,14 @@
     "connect-flash": "^0.1.1",
     "connect-redis": "^8.0.1",
     "csrf-sync": "^4.0.3",
-    "express": "^4.21.2",
+    "express": "^5.0.1",
     "express-session": "^1.18.1",
     "govuk-frontend": "^5.7.1",
     "helmet": "^8.0.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
+    "notifications-node-client": "^8.2.1",
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
@@ -146,5 +153,8 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2",
     "wiremock": "^3.10.0"
+  },
+  "overrides": {
+    "cldr-data-downloader": "1.1.0"
   }
 }

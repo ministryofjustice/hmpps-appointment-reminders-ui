@@ -93,6 +93,10 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
   },
+  notify: {
+    apiKey: get('NOTIFY_API_KEY', 'test', requiredInProduction),
+    customUrl: get('NOTIFY_API_KEY', false) === false ? 'http://localhost:9090/notifications-api' : undefined,
+  },
   sqs: {
     audit: auditConfig(),
   },
