@@ -109,7 +109,7 @@
   },
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^4.0.2",
-    "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.1",
+    "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.2",
     "@tsconfig/node22": "^22.0.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
