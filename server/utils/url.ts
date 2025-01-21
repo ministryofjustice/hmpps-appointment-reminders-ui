@@ -11,7 +11,7 @@ export function removeURLParameter(url: string | Request, key: string, value?: s
   return newUrl.toString()
 }
 
-export function asArray(param: undefined | string | string[] | ParsedQs | ParsedQs[]): string[] {
+export function asArray(param: undefined | string | ParsedQs | (string | ParsedQs)[]): string[] {
   if (param === undefined) return []
   return Array.isArray(param) ? (param as string[]) : [param as string]
 }
