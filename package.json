@@ -76,7 +76,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.734.0",
+    "@aws-sdk/client-sqs": "^3.741.0",
     "@js-joda/core": "^5.6.4",
     "@js-joda/locale": "^4.15.1",
     "@js-joda/locale_en": "^4.15.1",
@@ -119,19 +119,19 @@
     "@types/http-errors": "^2.0.4",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.8",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.13.0",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.22.0",
-    "@typescript-eslint/parser": "^8.22.0",
+    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/parser": "^8.23.0",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "chokidar": "^3.6.0",
     "concurrently": "^9.1.2",
-    "cypress": "^14.0.0",
+    "cypress": "^14.0.1",
     "cypress-multi-reporters": "^2.0.5",
     "esbuild": "^0.24.2",
     "esbuild-plugin-clean": "^1.0.1",
@@ -152,7 +152,7 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3",
-    "wiremock": "^3.10.0"
+    "wiremock": "^3.11.0"
   },
   "overrides": {
     "cldr-data-downloader": "1.1.0"
