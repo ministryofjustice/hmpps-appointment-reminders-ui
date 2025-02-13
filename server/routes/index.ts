@@ -52,7 +52,7 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
       .filter(n => filters.template.length === 0 || filters.template.includes(n.template.id))
       .map(n => [
         {
-          html: `<a href="/notification/${n.id}" class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">${n.phone_number}</a><div class="secondary-text">${n.reference}</div>`,
+          html: `<a href="/notification/${filters.provider}/${n.id}" class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">${n.phone_number}</a><div class="secondary-text">${n.reference}</div>`,
         },
         {
           html: `<p class="govuk-!-margin-bottom-1">${n.body}</p><time class="secondary-text" datetime="${n.sent_at}">Sent on ${ZonedDateTime.parse(n.sent_at).format(dateTimeFormatter)}</div>`,

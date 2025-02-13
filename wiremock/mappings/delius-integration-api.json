@@ -28,6 +28,14 @@
         },
         "transformers": ["response-template"]
       }
+    },
+    {
+      "request": {
+        "urlPattern": "/delius/health/ping"
+      },
+      "response": {
+        "status": 200
+      }
     }
   ]
 }
