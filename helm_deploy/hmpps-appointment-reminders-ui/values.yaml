@@ -41,7 +41,8 @@ generic-service:
       CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
       CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'
     govuk-notify:
-      NOTIFY_API_KEY: 'API_KEY'
+      NOTIFY_N56_API_KEY: 'N56_API_KEY'
+      NOTIFY_N03_API_KEY: 'N03_API_KEY'
     elasticache-redis:
       SESSION_SECRET: 'session_secret'
       REDIS_HOST: 'primary_endpoint_address'
