@@ -1,0 +1,41 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/delius/users/USER1/providers",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "providers": [
+            {
+              "code": "N56",
+              "name": "East of England"
+            },
+            {
+              "code": "N03",
+              "name": "Wales"
+            },
+            {
+              "code": "N07",
+              "name": "London"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/delius/health/ping"
+      },
+      "response": {
+        "status": 200
+      }
+    }
+  ]
+}

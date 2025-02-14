@@ -92,10 +92,30 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    delius: {
+      url: get('DELIUS_INTEGRATION_API_URL', 'http://localhost:9090/delius', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000))),
+    },
   },
   notify: {
-    apiKey: get('NOTIFY_API_KEY', 'test', requiredInProduction),
-    customUrl: get('NOTIFY_API_KEY', false) === false ? 'http://localhost:9090/notifications-api' : undefined,
+    customUrl: get('NOTIFY_N56_API_KEY', false) === false ? 'http://localhost:9090/notifications-api' : undefined,
+    providers: {
+      eastOfEngland: {
+        code: 'N56',
+        name: 'East of England',
+        apiKey: get('NOTIFY_N56_API_KEY', 'test', requiredInProduction),
+      },
+      wales: {
+        code: 'N03',
+        name: 'Wales',
+        apiKey: get('NOTIFY_N03_API_KEY', 'test', requiredInProduction),
+      },
+    },
   },
   sqs: {
     audit: auditConfig(),
