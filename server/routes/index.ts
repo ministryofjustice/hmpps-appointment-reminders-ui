@@ -35,7 +35,7 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
     const filters: Filters = {
       date: req.query.date
         ? LocalDate.parse(req.query.date as string, DateTimeFormatter.ofPattern('d/M/yyyy'))
-        : LocalDate.now(),
+        : LocalDate.now().minusDays(1),
       keywords: req.query.keywords as string,
       status: asArray(req.query.status),
       template: asArray(req.query.template),
