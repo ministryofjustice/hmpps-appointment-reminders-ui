@@ -13,19 +13,19 @@
           },
           "notifications": [
             {
-              "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
-              "completed_at": "{{ now }}",
+              "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+1 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now offset='-1 days' }}",
               "cost_details": {
                 "billable_sms_fragments": 1,
                 "international_rate_multiplier": 1.0,
                 "sms_rate": 0.0227
               },
               "cost_in_pounds": 0.0227,
-              "created_at": "{{ now }}",
+              "created_at": "{{ now offset='-1 days' }}",
               "id": "00000000-0000-0000-0000-000000000001",
               "phone_number": "07700900000",
               "reference": "A000001",
-              "sent_at": "{{ now }}",
+              "sent_at": "{{ now offset='-1 days' }}",
               "status": "delivered",
               "subject": null,
               "template": {
@@ -36,19 +36,19 @@
               "type": "sms"
             },
             {
-              "body": "Reminder: Dear Test2. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
-              "completed_at": "{{ now }}",
+              "body": "Reminder: Dear Test2. This is an automated reminder of your UPW appointment on {{ now offset='+1 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+              "completed_at": "{{ now offset='-1 days' }}",
               "cost_details": {
                 "billable_sms_fragments": 1,
                 "international_rate_multiplier": 1.0,
                 "sms_rate": 0.0227
               },
               "cost_in_pounds": 0.0227,
-              "created_at": "{{ now }}",
+              "created_at": "{{ now offset='-1 days' }}",
               "id": "00000000-0000-0000-0000-000000000002",
               "phone_number": "07700900111",
               "reference": "A000002",
-              "sent_at": "{{ now }}",
+              "sent_at": "{{ now offset='-1 days' }}",
               "status": "sending",
               "subject": null,
               "template": {
@@ -74,19 +74,19 @@
       "response": {
         "status": 200,
         "jsonBody": {
-          "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+2 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
-          "completed_at": "{{ now }}",
+          "body": "Reminder: Dear Test. This is an automated reminder of your UPW appointment on {{ now offset='+1 days' format='dd/MM/yyyy' }}. Please bring lunch and wear appropriate clothing.",
+          "completed_at": "{{ now offset='-1 days' }}",
           "cost_details": {
             "billable_sms_fragments": 1,
             "international_rate_multiplier": 1.0,
             "sms_rate": 0.0227
           },
           "cost_in_pounds": 0.0227,
-          "created_at": "{{ now }}",
+          "created_at": "{{ now offset='-1 days' }}",
           "id": "00000000-0000-0000-0000-000000000001",
           "phone_number": "07700900000",
           "reference": "A000001",
-          "sent_at": "{{ now }}",
+          "sent_at": "{{ now offset='-1 days' }}",
           "status": "delivered",
           "subject": null,
           "template": {
