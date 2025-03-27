@@ -6,7 +6,7 @@ import { Parser } from '@json2csv/plainjs'
 import type { Services } from '../services'
 import config from '../config'
 import { dateTimeFormatter } from '../utils/utils'
-import { asArray } from '../utils/url'
+import { asArray, asDate } from '../utils/url'
 import DeliusClient from '../data/deliusClient'
 import getAllNotifications from '../utils/notifyUtils'
 import { Filters, filterByKeywords, getAvailableFilterOptions, mapStatus } from '../utils/filterUtils'
@@ -33,16 +33,28 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
     }
 
     const filters: Filters = {
-      date: req.query.date
-        ? LocalDate.parse(req.query.date as string, DateTimeFormatter.ofPattern('d/M/yyyy'))
-        : LocalDate.now().minusDays(1),
+      from: asDate(req.query.from),
+      to: asDate(req.query.to),
       keywords: req.query.keywords as string,
       status: asArray(req.query.status),
       template: asArray(req.query.template),
       provider: (req.query.provider as string) ?? providers[0].code,
     }
+    const minDate = LocalDate.now().minusDays(90)
+    const maxDate = LocalDate.now()
+    const errors = {} as Record<string, string>
+    if (filters.from.isBefore(minDate)) errors.from = 'Cannot be more than 90 days in the past'
+    if (filters.from.isAfter(maxDate)) errors.to = 'Please select a date in the past'
+    if (filters.from.isAfter(filters.to)) errors.to = 'Must be on or after the "From" date'
+    if (filters.from.isBefore(filters.to.minusDays(7))) errors.from = 'Must be within 7 days of the "To" date'
+    if (filters.to.isAfter(maxDate)) errors.to = 'Please select a date in the past'
+    if (Object.keys(errors).length > 0) {
+      res.render('pages/list', { filters, minDate, maxDate, errors })
+      return
+    }
+
     const notifyClient = notifyClients[filters.provider]
-    const notifications = await getAllNotifications(notifyClient, filters.date)
+    const notifications = await getAllNotifications(notifyClient, filters.from, filters.to)
     const availableFilterOptions = await getAvailableFilterOptions(notifications, filters, providers, notifyClient, req)
 
     const headers = [{ text: 'To' }, { text: 'Message' }, { text: 'Status' }]
@@ -60,22 +72,24 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
         { text: mapStatus(n.status) },
       ])
 
-    res.render('pages/list', { availableFilterOptions, filters, headers, results })
+    res.render('pages/list', { availableFilterOptions, filters, minDate, maxDate, headers, results })
   })
 
   router.get('/csv', async (req, res, next) => {
-    const date = req.query.date
-      ? LocalDate.parse(req.query.date as string, DateTimeFormatter.ofPattern('d/M/yyyy'))
-      : LocalDate.now()
+    const from = asDate(req.query.from)
+    const to = asDate(req.query.to)
     const providerCode = req.query.provider as string
-    const csvParser = new Parser({
-      fields: ['id', 'reference', 'phone_number', 'body', 'status', 'sent_at', 'completed_at'],
-    })
+    const formatter = DateTimeFormatter.ofPattern('yyyy-MM-dd')
+    const filename = from.isEqual(to)
+      ? `appointment-reminders-${from.format(formatter)}.csv`
+      : `appointment-reminders-${from.format(formatter)}-to-${to.format(formatter)}.csv`
 
-    res
-      .type('text/csv')
-      .attachment(`appointment-reminders-${date.format(DateTimeFormatter.ofPattern('yyyy-MM-dd'))}.csv`)
-      .send(csvParser.parse(await getAllNotifications(notifyClients[providerCode], date)))
+    const notifications = await getAllNotifications(notifyClients[providerCode], from, to)
+    const csvContent = new Parser({
+      fields: ['id', 'reference', 'phone_number', 'body', 'status', 'sent_at', 'completed_at'],
+    }).parse(notifications)
+
+    res.type('text/csv').attachment(filename).send(csvContent)
   })
 
   router.get('/notification/:provider/:id', async (req, res, next) => {

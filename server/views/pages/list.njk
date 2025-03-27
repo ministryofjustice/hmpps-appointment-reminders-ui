@@ -6,17 +6,22 @@
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
 {%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
 {%- from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions -%}
+{%- from "govuk/components/error-summary/macro.njk" import govukErrorSummary -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors | toErrorList }) }}
+  {% endif %}
+
   {{ mojPageHeaderActions({
     heading: { text: 'Sent reminders' },
     items: [{
       text: 'Download as CSV',
       classes: 'govuk-button--secondary',
-      href: '/csv?date=' + (filters.date | formatDate('dd/MM/yyyy') + '&provider=' + filters.provider)
+      href: '/csv?from=' + (filters.from | formatDate('dd/MM/yyyy')) + '&to=' + (filters.to | formatDate('dd/MM/yyyy')) + '&provider=' + filters.provider
     }]
   }) }}
 
@@ -25,10 +30,25 @@
       {%- set filterOptionsHtml %}
         <div class="govuk-form-group">
           {{ mojDatePicker({
-            id: "date",
-            name: "date",
-            label: { text: "Date", classes: "govuk-label--s" },
-            value: filters.date | formatDate('dd/MM/yyyy')
+            id: "from",
+            name: "from",
+            label: { text: "From", classes: "govuk-label--s" },
+            value: filters.from | formatDate('dd/MM/yyyy'),
+            minDate: minDate | formatDate('dd/MM/yyyy'),
+            maxDate: maxDate | formatDate('dd/MM/yyyy'),
+            errorMessage: { text: errors.from } if errors.from
+          }) }}
+        </div>
+
+        <div class="govuk-form-group">
+          {{ mojDatePicker({
+            id: "to",
+            name: "to",
+            label: { text: "To", classes: "govuk-label--s" },
+            value: filters.to | formatDate('dd/MM/yyyy'),
+            minDate: minDate | formatDate('dd/MM/yyyy'),
+            maxDate: maxDate | formatDate('dd/MM/yyyy'),
+            errorMessage: { text: errors.to } if errors.to
           }) }}
         </div>
 

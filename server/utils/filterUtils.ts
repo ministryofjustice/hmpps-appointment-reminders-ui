@@ -6,7 +6,8 @@ import { convertToTitleCase } from './utils'
 import { Provider } from '../data/deliusClient'
 
 export interface Filters {
-  date: LocalDate
+  from: LocalDate
+  to: LocalDate
   status: string[]
   template: string[]
   provider: string
