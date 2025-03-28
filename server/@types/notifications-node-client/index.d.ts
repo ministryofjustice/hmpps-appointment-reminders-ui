@@ -31,7 +31,7 @@ declare module 'notifications-node-client' {
       data: {
         links: {
           current: string
-          next: string
+          next?: string
         }
         notifications: Notification[]
       }
