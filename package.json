@@ -81,7 +81,7 @@
     "@js-joda/locale": "^4.15.2",
     "@js-joda/locale_en": "^4.15.1",
     "@json2csv/plainjs": "^7.0.6",
-    "@ministryofjustice/frontend": "^4.0.1",
+    "@ministryofjustice/frontend": "^5.1.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
     "@types/qs": "^6.9.18",
     "agentkeepalive": "^4.6.0",
