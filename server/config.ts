@@ -110,10 +110,25 @@ export default {
         name: 'East of England',
         apiKey: get('NOTIFY_N56_API_KEY', 'test', requiredInProduction),
       },
+      greaterManchester: {
+        code: 'N50',
+        name: 'Greater Manchester',
+        apiKey: get('NOTIFY_N50_API_KEY', 'test', requiredInProduction),
+      },
+      london: {
+        code: 'N07',
+        name: 'London',
+        apiKey: get('NOTIFY_N07_API_KEY', 'test', requiredInProduction),
+      },
       wales: {
         code: 'N03',
         name: 'Wales',
         apiKey: get('NOTIFY_N03_API_KEY', 'test', requiredInProduction),
+      },
+      westMidlands: {
+        code: 'N52',
+        name: 'West Midlands',
+        apiKey: get('NOTIFY_N52_API_KEY', 'test', requiredInProduction),
       },
     },
   },
