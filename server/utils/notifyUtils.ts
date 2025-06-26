@@ -1,5 +1,6 @@
 import { LocalDate, ZonedDateTime } from '@js-joda/core'
 import { Notification, NotifyClient } from 'notifications-node-client'
+import { parseDate } from './utils'
 
 export default async function getAllNotifications(
   client: NotifyClient,
@@ -11,7 +12,7 @@ export default async function getAllNotifications(
   while (true) {
     const response = await client.getNotifications('sms', null, null, olderThanId) // eslint-disable-line no-await-in-loop
     const page = response.data.notifications.filter(n => {
-      const sentAt = ZonedDateTime.parse(n.sent_at).toLocalDate().toEpochDay()
+      const sentAt = parseDate(n.sent_at).toLocalDate().toEpochDay()
       return from.toEpochDay() <= sentAt && sentAt <= to.toEpochDay()
     })
     notifications.push(...page)
