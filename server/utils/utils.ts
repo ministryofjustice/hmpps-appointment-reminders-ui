@@ -1,5 +1,6 @@
-import { DateTimeFormatter } from '@js-joda/core'
+import { DateTimeFormatter, TemporalAccessor, ZonedDateTime, ZoneId } from '@js-joda/core'
 import { Locale } from '@js-joda/locale_en'
+import '@js-joda/timezone'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -26,3 +27,16 @@ export const initialiseName = (fullName?: string): string | null => {
 }
 
 export const dateTimeFormatter = DateTimeFormatter.ofPattern("eeee, d MMMM 'at' HH:mma").withLocale(Locale.ENGLISH)
+export const europeLondon = ZoneId.of('Europe/London')
+
+export const formatDate = (date?: TemporalAccessor, pattern?: string): string => {
+  if (!date) return ''
+  const formatter = pattern ? DateTimeFormatter.ofPattern(pattern).withLocale(Locale.ENGLISH) : dateTimeFormatter
+  if (date instanceof ZonedDateTime) {
+    return formatter.format(date.withZoneSameInstant(europeLondon))
+  }
+  return formatter.format(date)
+}
+
+export const parseDate = (dateString?: string): ZonedDateTime =>
+  dateString ? ZonedDateTime.parse(dateString).withZoneSameInstant(europeLondon) : null

@@ -1,15 +1,15 @@
 import { Router } from 'express'
 import { NotifyClient } from 'notifications-node-client'
 
-import { DateTimeFormatter, LocalDate, ZonedDateTime } from '@js-joda/core'
+import { DateTimeFormatter, LocalDate } from '@js-joda/core'
 import { Parser } from '@json2csv/plainjs'
 import type { Services } from '../services'
 import config from '../config'
-import { dateTimeFormatter } from '../utils/utils'
+import { formatDate, parseDate } from '../utils/utils'
 import { asArray, asDate } from '../utils/url'
 import DeliusClient from '../data/deliusClient'
 import getAllNotifications from '../utils/notifyUtils'
-import { Filters, filterByKeywords, getAvailableFilterOptions, mapStatus } from '../utils/filterUtils'
+import { filterByKeywords, Filters, getAvailableFilterOptions, mapStatus } from '../utils/filterUtils'
 
 const notifyClients: Record<string, NotifyClient> = Object.fromEntries(
   Object.values(config.notify.providers).map(providerConfig => [
@@ -67,7 +67,10 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
           html: `<a href="/notification/${filters.provider}/${n.id}" class="govuk-!-font-weight-bold govuk-!-margin-bottom-1">${n.phone_number}</a><div class="secondary-text">${n.reference}</div>`,
         },
         {
-          html: `<p class="govuk-!-margin-bottom-1">${n.body}</p><time class="secondary-text" datetime="${n.sent_at}">Sent on ${ZonedDateTime.parse(n.sent_at).format(dateTimeFormatter)}</div>`,
+          html: `<p class="govuk-!-margin-bottom-1">${n.body}</p>
+          <time class="secondary-text" datetime="${n.sent_at}" title="${n.sent_at}">
+            Sent on ${formatDate(parseDate(n.sent_at))}
+          </time>`,
         },
         { text: mapStatus(n.status) },
       ])
