@@ -20,7 +20,7 @@ const notifyClients: Record<string, NotifyClient> = Object.fromEntries(
   ]),
 )
 
-export default function routes({ auditService, hmppsAuthClient }: Services): Router {
+export default function routes({ auditService, authenticationClient }: Services): Router {
   const router = Router()
 
   router.get('/', async (req, res, next) => {
@@ -108,8 +108,7 @@ export default function routes({ auditService, hmppsAuthClient }: Services): Rou
   })
 
   async function userProviders(username: string) {
-    const token = await hmppsAuthClient.getSystemClientToken()
-    const response = await new DeliusClient(token).getUserAccess(username)
+    const response = await new DeliusClient(authenticationClient).getUserAccess(username)
     const enabledProviders = Object.keys(notifyClients)
     return response.providers.filter(provider => enabledProviders.includes(provider.code))
   }
