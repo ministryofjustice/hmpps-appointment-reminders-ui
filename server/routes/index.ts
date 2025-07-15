@@ -114,8 +114,9 @@ export default function routes({ auditService, authenticationClient }: Services)
     const sort = req.query.sort as string | undefined
     const page = asNumber(req.query.page, 1)
     const providerCode = req.query.provider as string
-    if (!providerCode) {
-      res.redirect('/')
+    const providers = await userProviders(req.user.username)
+    if (!providerCode || !providers.find(p => p.code === providerCode)) {
+      res.redirect('/autherror')
       return
     }
 
@@ -157,8 +158,9 @@ export default function routes({ auditService, authenticationClient }: Services)
     const sort = req.query.sort as string | undefined
     const page = asNumber(req.query.page, 1)
     const providerCode = req.query.provider as string
-    if (!providerCode) {
-      res.redirect('/')
+    const providers = await userProviders(req.user.username)
+    if (!providerCode || !providers.find(p => p.code === providerCode)) {
+      res.redirect('/autherror')
       return
     }
 

@@ -27,4 +27,9 @@ context('Data quality page', () => {
     cy.url().should('contain', '/data-quality/invalid?provider=N56&sort=CRN.descending')
     cy.get('table thead th:nth-child(2)').should('have.attr', 'aria-sort').should('equal', 'descending')
   })
+
+  it('cannot access other providers', () => {
+    cy.visit('/data-quality/invalid?provider=N99')
+    cy.url().should('contain', '/autherror')
+  })
 })
