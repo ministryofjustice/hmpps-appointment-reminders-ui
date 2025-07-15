@@ -102,6 +102,9 @@ export default {
       agent: new AgentConfig(Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000))),
     },
   },
+  delius: {
+    deeplinkUrl: get('DELIUS_URL', 'https://example.com', requiredInProduction),
+  },
   notify: {
     customUrl: get('NOTIFY_N56_API_KEY', false) === false ? 'http://localhost:9090/notifications-api' : undefined,
     providers: {

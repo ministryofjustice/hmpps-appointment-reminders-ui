@@ -13,6 +13,16 @@
 {% block bodyStart %}
 {% endblock %}
 
+{% block main %}
+  {% block beforeContainer %}{% endblock %}
+  <div class="govuk-width-container {%- if containerClasses %} {{ containerClasses }}{% endif %}">
+    {% block beforeContent %}{% endblock %}
+    <main class="govuk-main-wrapper {%- if mainClasses %} {{ mainClasses }}{% endif %}" id="main-content" {%- if mainLang %} lang="{{ mainLang }}"{% endif %}>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+{% endblock %}
+
 {% block bodyEnd %}
   <script type="module" src="{{ '/assets/js/app.js' | assetMap }}"></script>
 {% endblock %}

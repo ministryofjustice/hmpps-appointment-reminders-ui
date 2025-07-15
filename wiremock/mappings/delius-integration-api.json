@@ -31,6 +31,143 @@
     },
     {
       "request": {
+        "urlPathPattern": "/delius/data-quality/.+/stats",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "invalid": 34,
+          "missing": 1876
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPathPattern": "/delius/data-quality/.+/(.+)-mobile-numbers",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "content": [
+            {
+              "name": "Jamal Test",
+              "crn": "E000001",
+              "mobileNumber": "0700000000000",
+              "manager": {
+                "name": "Felicity Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Stephen Test",
+              "crn": "E000002",
+              "mobileNumber": "070000000231412",
+              "manager": {
+                "name": "CLAIRE Test"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "CLAIRE Test",
+              "crn": "D000003",
+              "mobileNumber": "074123123",
+              "manager": {
+                "name": "Stephen Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "AISHA Test",
+              "crn": "D000004",
+              "mobileNumber": "077999999968",
+              "manager": {
+                "name": "Felicity Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Hossein Test",
+              "crn": "T000005",
+              "mobileNumber": "07999 99 999",
+              "manager": {
+                "name": "Felicity Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Jamal Test",
+              "crn": "E000006",
+              "mobileNumber": "0743555555",
+              "manager": {
+                "name": "Robert Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Abdur Test",
+              "crn": "E000007",
+              "mobileNumber": "077440 343074",
+              "manager": {
+                "name": "Robert Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Brandon Test",
+              "crn": "E000008",
+              "mobileNumber": "074151151151",
+              "manager": {
+                "name": "Abdur Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Oldham"
+            },
+            {
+              "name": "Abigail Test",
+              "crn": "E000009",
+              "mobileNumber": "074272727272",
+              "manager": {
+                "name": "Jane Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Oldham"
+            },
+            {
+              "name": "LEANNE Test",
+              "crn": "D000010",
+              "mobileNumber": "07990 9999 990",
+              "manager": {
+                "name": "Jane Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Oldham"
+            }
+          ],
+          "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 34,
+            "totalPages": 4
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json;charset=UTF-8"
+        }
+      }
+    },
+    {
+      "request": {
         "urlPattern": "/delius/health/ping"
       },
       "response": {

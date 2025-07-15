@@ -7,9 +7,20 @@
 {%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
 {%- from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions -%}
 {%- from "govuk/components/error-summary/macro.njk" import govukErrorSummary -%}
+{%- from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation -%}
+{%- from "moj/components/notification-badge/macro.njk" import mojNotificationBadge -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContainer %}
+  {{ govukServiceNavigation({
+    navigation: [
+      { href: "#", text: "Sent reminders", href: "/", active: true },
+      { href: "#", html: "Data quality " + mojNotificationBadge({ text: dataQuality.total }), href: "/data-quality/invalid?provider=" + filters.provider }
+    ]
+  }) }}
+{% endblock %}
 
 {% block content %}
   {% if errors %}
