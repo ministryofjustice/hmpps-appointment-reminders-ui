@@ -29,7 +29,7 @@ context('Data quality page', () => {
   })
 
   it('cannot access other providers', () => {
-    cy.visit('/data-quality/invalid?provider=N99')
+    cy.visit('/data-quality/invalid?provider=N99', { failOnStatusCode: false })
     cy.url().should('contain', '/autherror')
   })
 })
