@@ -6,10 +6,11 @@ import { Parser } from '@json2csv/plainjs'
 import type { Services } from '../services'
 import config from '../config'
 import { formatDate, parseDate } from '../utils/utils'
-import { asArray, asDate } from '../utils/url'
+import { addUrlParameters, asArray, asDate, asNumber } from '../utils/url'
 import DeliusClient from '../data/deliusClient'
 import getAllNotifications from '../utils/notifyUtils'
 import { filterByKeywords, Filters, getAvailableFilterOptions, mapStatus } from '../utils/filterUtils'
+import getPaginationLinks from '../utils/pagination'
 
 const notifyClients: Record<string, NotifyClient> = Object.fromEntries(
   Object.values(config.notify.providers).map(providerConfig => [
@@ -53,6 +54,7 @@ export default function routes({ auditService, authenticationClient }: Services)
       return
     }
 
+    const dataQuality = await dataQualityStats(filters.provider)
     const notifyClient = notifyClients[filters.provider]
     const notifications = await getAllNotifications(notifyClient, filters.from, filters.to)
     const availableFilterOptions = await getAvailableFilterOptions(notifications, filters, providers, notifyClient, req)
@@ -75,7 +77,7 @@ export default function routes({ auditService, authenticationClient }: Services)
         { text: mapStatus(n.status) },
       ])
 
-    res.render('pages/list', { availableFilterOptions, filters, minDate, maxDate, headers, results })
+    res.render('pages/list', { dataQuality, availableFilterOptions, filters, minDate, maxDate, headers, results })
   })
 
   router.get('/csv', async (req, res, next) => {
@@ -107,10 +109,106 @@ export default function routes({ auditService, authenticationClient }: Services)
     res.render('pages/notification', { notification, templateName, previousNotifications })
   })
 
+  router.get('/data-quality/invalid', async (req, res, next) => {
+    await auditService.logPageView('DATA_QUALITY', { who: res.locals.user.username, correlationId: req.id })
+    const sort = req.query.sort as string | undefined
+    const page = asNumber(req.query.page, 1)
+    const providerCode = req.query.provider as string
+    const providers = await userProviders(req.user.username)
+    if (!providerCode || !providers.find(p => p.code === providerCode)) {
+      res.redirect('/autherror')
+      return
+    }
+
+    const [data, stats] = await Promise.all([
+      new DeliusClient(authenticationClient).getInvalidMobileNumbers(providerCode, page, sort),
+      dataQualityStats(providerCode),
+    ])
+    res.render('pages/data-quality/invalid', {
+      providerCode,
+      providerName: Object.values(config.notify.providers).find(p => p.code === providerCode).name,
+      dataQuality: stats,
+      rows: data.content.map(item => [
+        { text: item.name },
+        { text: item.crn },
+        { text: item.mobileNumber ?? '' },
+        item.manager.email
+          ? {
+              html: `<a href='mailto:${item.manager.email}'>${item.manager.name}</a>`,
+              attributes: { 'data-sort-value': item.manager.name },
+            }
+          : { text: item.manager.name },
+        { text: item.probationDeliveryUnit },
+        {
+          html: `<a href="${config.delius.deeplinkUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=CaseSummary&CRN=${item.crn}" target="_delius">Open in NDelius ↗</a>`,
+        },
+      ]),
+      pagination: getPaginationLinks(
+        page,
+        data.page.totalPages,
+        data.page.totalElements,
+        pageNumber => addUrlParameters(req, { page: pageNumber.toString() }),
+        data.page.size,
+      ),
+    })
+  })
+
+  router.get('/data-quality/missing', async (req, res, next) => {
+    await auditService.logPageView('DATA_QUALITY', { who: res.locals.user.username, correlationId: req.id })
+    const sort = req.query.sort as string | undefined
+    const page = asNumber(req.query.page, 1)
+    const providerCode = req.query.provider as string
+    const providers = await userProviders(req.user.username)
+    if (!providerCode || !providers.find(p => p.code === providerCode)) {
+      res.redirect('/autherror')
+      return
+    }
+
+    const [data, stats] = await Promise.all([
+      new DeliusClient(authenticationClient).getMissingMobileNumbers(providerCode, page, sort),
+      dataQualityStats(providerCode),
+    ])
+    res.render('pages/data-quality/missing', {
+      providerCode,
+      providerName: Object.values(config.notify.providers).find(p => p.code === providerCode).name,
+      dataQuality: stats,
+      rows: data.content.map(item => [
+        { text: item.name },
+        { text: item.crn },
+        item.manager.email
+          ? {
+              html: `<a href='mailto:${item.manager.email}'>${item.manager.name}</a>`,
+              attributes: { 'data-sort-value': item.manager.name },
+            }
+          : { text: item.manager.name },
+        { text: item.probationDeliveryUnit },
+        {
+          html: `<a href="${config.delius.deeplinkUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=CaseSummary&CRN=${item.crn}" target="_delius">Open in NDelius ↗</a>`,
+        },
+      ]),
+      pagination: getPaginationLinks(
+        page,
+        data.page.totalPages,
+        data.page.totalElements,
+        pageNumber => addUrlParameters(req, { page: pageNumber.toString() }),
+        data.page.size,
+      ),
+    })
+  })
+
   async function userProviders(username: string) {
     const response = await new DeliusClient(authenticationClient).getUserAccess(username)
     const enabledProviders = Object.keys(notifyClients)
     return response.providers.filter(provider => enabledProviders.includes(provider.code))
+  }
+
+  async function dataQualityStats(providerCode: string): Promise<{ total: string; invalid: string; missing: string }> {
+    const stats = await new DeliusClient(authenticationClient).getDataQualityStats(providerCode)
+    return {
+      total: (stats.invalid + stats.missing).toLocaleString(),
+      invalid: stats.invalid.toLocaleString(),
+      missing: stats.missing.toLocaleString(),
+    }
   }
 
   return router

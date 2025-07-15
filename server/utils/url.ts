@@ -12,9 +12,28 @@ export function removeURLParameter(url: string | Request, key: string, value?: s
   return newUrl.toString()
 }
 
+export function addUrlParameters(url: string | Request, params?: Record<string, string | string[]>): string {
+  const newUrl = new URL(typeof url === 'string' ? url : getAbsoluteUrl(url))
+  if (params)
+    Object.entries(params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        newUrl.searchParams.delete(`${key}[]`)
+        value.forEach(v => newUrl.searchParams.append(`${key}[]`, v.toString()))
+      } else {
+        newUrl.searchParams.set(key, value.toString())
+      }
+    })
+  return newUrl.toString()
+}
+
 export function asArray(param: undefined | string | ParsedQs | (string | ParsedQs)[]): string[] {
   if (param === undefined) return []
   return Array.isArray(param) ? (param as string[]) : [param as string]
+}
+
+export function asNumber(param: undefined | string | ParsedQs | (string | ParsedQs)[], defaultValue?: number): number {
+  if (param === undefined) return defaultValue
+  return parseFloat(param as string)
 }
 
 export function asDate(

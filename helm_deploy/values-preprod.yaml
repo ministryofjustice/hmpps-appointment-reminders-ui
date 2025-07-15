@@ -12,6 +12,7 @@ generic-service:
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     DELIUS_INTEGRATION_API_URL: "https://appointment-reminders-and-delius-preprod.hmpps.service.justice.gov.uk"
+    DELIUS_URL: "https://ndelius.pre-prod.delius.probation.hmpps.dsd.io"
     ENVIRONMENT_NAME: PRE-PRODUCTION
 
 generic-prometheus-alerts:
