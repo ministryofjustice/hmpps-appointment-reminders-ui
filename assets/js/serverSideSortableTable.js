@@ -1,11 +1,6 @@
 import { SortableTable } from '@ministryofjustice/frontend'
 
 export default class ServerSideSortableTable extends SortableTable {
-  constructor($root, config = {}) {
-    super($root, config)
-    this.setAriaSortValuesFromUrl()
-  }
-
   onSortButtonClick(event) {
     const $target = /** @type {HTMLElement} */ (event.target)
     const $button = $target.closest('button')
@@ -45,6 +40,16 @@ export default class ServerSideSortableTable extends SortableTable {
         this.updateDirectionIndicators()
       }
     }
+  }
+
+  initialiseSortedColumn() {
+    this.setAriaSortValuesFromUrl()
+    super.initialiseSortedColumn()
+  }
+
+  // eslint-disable-next-line
+  sort($rows, columnNumber, sortDirection) {
+    return $rows // no-op - sorting is performed server-side
   }
 }
 
