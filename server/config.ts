@@ -96,10 +96,10 @@ export default {
       url: get('DELIUS_INTEGRATION_API_URL', 'http://localhost:9090/delius', requiredInProduction),
       healthPath: '/health/ping',
       timeout: {
-        response: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_DEADLINE', 5000)),
+        response: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 15000)),
+        deadline: Number(get('DELIUS_INTEGRATION_API_TIMEOUT_DEADLINE', 15000)),
       },
-      agent: new AgentConfig(Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 5000))),
+      agent: new AgentConfig(Number(get('DELIUS_INTEGRATION_API_TIMEOUT_RESPONSE', 15000))),
     },
   },
   delius: {

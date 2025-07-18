@@ -31,17 +31,38 @@
     },
     {
       "request": {
-        "urlPathPattern": "/delius/data-quality/.+/stats",
-        "method": "GET"
+        "url": "/delius/users/USER1/access",
+        "method": "POST"
       },
       "response": {
         "status": 200,
         "jsonBody": {
-          "invalid": 34,
-          "missing": 1876
+          "access": [
+            {
+              "crn": "E000006",
+              "userExcluded": true,
+              "userRestricted": true,
+              "exclusionMessage": "User is excluded",
+              "restrictionMessage": "User is restricted"
+            }
+          ]
         },
         "headers": {
           "Content-Type": "application/json;charset=UTF-8"
+        },
+        "transformers": ["response-template"]
+      }
+    },
+    {
+      "request": {
+        "urlPathPattern": "/delius/data-quality/.+/invalid-mobile-numbers/count",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "body": "99+",
+        "headers": {
+          "Content-Type": "text/plain;charset=UTF-8"
         }
       }
     },
@@ -55,33 +76,24 @@
         "jsonBody": {
           "content": [
             {
-              "name": "Jamal Test",
-              "crn": "E000001",
-              "mobileNumber": "0700000000000",
+              "name": "Abdur Test",
+              "crn": "E000007",
+              "mobileNumber": "077440 343074",
               "manager": {
-                "name": "Felicity Test",
+                "name": "Robert Test",
                 "email": "test@example.com"
               },
               "probationDeliveryUnit": "Manchester South"
             },
             {
-              "name": "Stephen Test",
-              "crn": "E000002",
-              "mobileNumber": "070000000231412",
+              "name": "Abigail Test",
+              "crn": "E000009",
+              "mobileNumber": "074272727272",
               "manager": {
-                "name": "CLAIRE Test"
-              },
-              "probationDeliveryUnit": "Manchester South"
-            },
-            {
-              "name": "CLAIRE Test",
-              "crn": "D000003",
-              "mobileNumber": "074123123",
-              "manager": {
-                "name": "Stephen Test",
+                "name": "Jane Test",
                 "email": "test@example.com"
               },
-              "probationDeliveryUnit": "Manchester South"
+              "probationDeliveryUnit": "Oldham"
             },
             {
               "name": "AISHA Test",
@@ -94,9 +106,39 @@
               "probationDeliveryUnit": "Manchester South"
             },
             {
+              "name": "Brandon Test",
+              "crn": "E000008",
+              "mobileNumber": "074151151151",
+              "manager": {
+                "name": "Abdur Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Oldham"
+            },
+            {
+              "name": "CLAIRE Test",
+              "crn": "D000003",
+              "mobileNumber": "074123123",
+              "manager": {
+                "name": "Stephen Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
               "name": "Hossein Test",
               "crn": "T000005",
               "mobileNumber": "07999 99 999",
+              "manager": {
+                "name": "Felicity Test",
+                "email": "test@example.com"
+              },
+              "probationDeliveryUnit": "Manchester South"
+            },
+            {
+              "name": "Jamal Test",
+              "crn": "E000001",
+              "mobileNumber": "0700000000000",
               "manager": {
                 "name": "Felicity Test",
                 "email": "test@example.com"
@@ -114,36 +156,6 @@
               "probationDeliveryUnit": "Manchester South"
             },
             {
-              "name": "Abdur Test",
-              "crn": "E000007",
-              "mobileNumber": "077440 343074",
-              "manager": {
-                "name": "Robert Test",
-                "email": "test@example.com"
-              },
-              "probationDeliveryUnit": "Manchester South"
-            },
-            {
-              "name": "Brandon Test",
-              "crn": "E000008",
-              "mobileNumber": "074151151151",
-              "manager": {
-                "name": "Abdur Test",
-                "email": "test@example.com"
-              },
-              "probationDeliveryUnit": "Oldham"
-            },
-            {
-              "name": "Abigail Test",
-              "crn": "E000009",
-              "mobileNumber": "074272727272",
-              "manager": {
-                "name": "Jane Test",
-                "email": "test@example.com"
-              },
-              "probationDeliveryUnit": "Oldham"
-            },
-            {
               "name": "LEANNE Test",
               "crn": "D000010",
               "mobileNumber": "07990 9999 990",
@@ -152,6 +164,15 @@
                 "email": "test@example.com"
               },
               "probationDeliveryUnit": "Oldham"
+            },
+            {
+              "name": "Stephen Test",
+              "crn": "E000002",
+              "mobileNumber": "070000000231412",
+              "manager": {
+                "name": "CLAIRE Test"
+              },
+              "probationDeliveryUnit": "Manchester South"
             }
           ],
           "page": {
