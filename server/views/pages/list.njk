@@ -17,7 +17,7 @@
   {{ govukServiceNavigation({
     navigation: [
       { href: "#", text: "Sent reminders", href: "/", active: true },
-      { href: "#", html: "Data quality " + mojNotificationBadge({ text: dataQuality.total }), href: "/data-quality/invalid?provider=" + filters.provider }
+      { href: "#", html: "Data quality " + (mojNotificationBadge({ text: dataQualityCount }) if dataQualityCount != "0" else ""), href: "/data-quality/invalid?provider=" + filters.provider }
     ]
   }) }}
 {% endblock %}

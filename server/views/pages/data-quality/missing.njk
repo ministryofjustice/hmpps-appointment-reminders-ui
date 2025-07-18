@@ -1,68 +1,44 @@
-{% extends "../../partials/layout.njk" %}
-{%- from "govuk/components/table/macro.njk" import govukTable -%}
-{%- from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions -%}
-{%- from "govuk/components/error-summary/macro.njk" import govukErrorSummary -%}
-{%- from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation -%}
-{%- from "moj/components/notification-badge/macro.njk" import mojNotificationBadge -%}
-{%- from "govuk/components/tabs/macro.njk" import govukTabs -%}
-{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{% extends "../../partials/dataquality.njk" %}
 {%- from "govuk/components/table/macro.njk" import govukTable -%}
 {%- from "govuk/components/pagination/macro.njk" import govukPagination -%}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
-{% set pageTitle = applicationName + " - Data Quality" %}
-{% set mainClasses = "app-container govuk-body" %}
-
-{% block beforeContainer %}
-  {{ govukServiceNavigation({
-    navigation: [
-      { href: "#", text: "Sent reminders", href: "/" },
-      { href: "#", html: "Data quality " + mojNotificationBadge({ text: dataQuality.total }), active: true }
-    ]
-  }) }}
-{% endblock %}
-
-{% block content %}
-  {% if errors %}
-    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors | toErrorList }) }}
-  {% endif %}
-
-  {{ mojPageHeaderActions({
-    heading: { text: 'Data quality' }
-  }) }}
-
-  <p>
-    You can use this page to identify and address mobile number recording issues in <strong>{{ providerName }}</strong>,
-    either by contacting the person's manager or following the NDelius link to update their record directly.
-  </p>
-
+{% block dataQualityResults %}
   {{ mojSubNavigation({
     label: "Sub navigation",
     items: [{
-      text: "Invalid mobile numbers (" + dataQuality.invalid + ")",
+      text: "Invalid mobile numbers",
       href: "/data-quality/invalid?provider=" + providerCode
     }, {
-      text: "Missing mobile numbers (" + dataQuality.missing + ")",
+      text: "Missing mobile numbers" + (" (" + pagination.total + ")" if pagination.total != 0 else ""),
       href: "/data-quality/missing?provider=" + providerCode,
       active: true
+    }, {
+      text: "Duplicate mobile numbers",
+      href: "/data-quality/duplicates?provider=" + providerCode
     }]
   }) }}
 
-  {{ govukTable({
-    attributes: {
-      "data-module": "moj-server-side-sortable-table"
-    },
-    head: [
-      { text: "Name", attributes: { "aria-sort": "ascending" } },
-      { text: "CRN", attributes: { "aria-sort": "none" } },
-      { text: "Manager", attributes: { "aria-sort": "none" } },
-      { text: "Probation delivery unit", attributes: { "aria-sort": "none" } },
-      { text: "" }
-    ],
-    rows: rows
-  }) }}
+  {% if rows | length > 0 %}
+    {{ govukTable({
+      attributes: {
+        "data-module": "moj-server-side-sortable-table"
+      },
+      head: [
+        { text: "Name", attributes: { "aria-sort": "ascending" } },
+        { text: "CRN", attributes: { "aria-sort": "none" } },
+        { text: "Mobile number", attributes: { "aria-sort": "none" } },
+        { text: "Manager", attributes: { "aria-sort": "none" } },
+        { text: "Probation delivery unit", attributes: { "aria-sort": "none" } },
+        { text: "" }
+      ],
+      rows: rows
+    }) }}
 
-  {% if pagination.items | length > 1 %}
-    {{ govukPagination({ previous: { href: pagination.prev }, next: { href: pagination.next }, items: pagination.items }) }}
+    {% if pagination.items | length > 1 %}
+      {{ govukPagination({ previous: { href: pagination.prev }, next: { href: pagination.next }, items: pagination.items }) }}
+    {% endif %}
+  {% else %}
+    <p>All cases have a recorded mobile number 🎉</p>
   {% endif %}
 {% endblock %}

@@ -7,15 +7,15 @@
   {{ mojSubNavigation({
     label: "Sub navigation",
     items: [{
-      text: "Invalid mobile numbers" + (" (" + pagination.total + ")" if pagination.total != 0 else ""),
-      href: "/data-quality/invalid?provider=" + providerCode,
-      active: true
+      text: "Invalid mobile numbers",
+      href: "/data-quality/invalid?provider=" + providerCode
     }, {
       text: "Missing mobile numbers",
       href: "/data-quality/missing?provider=" + providerCode
     }, {
-      text: "Duplicate mobile numbers",
-      href: "/data-quality/duplicates?provider=" + providerCode
+      text: "Duplicate mobile numbers" + (" (" + pagination.total + ")" if pagination.total != 0 else ""),
+      href: "/data-quality/duplicates?provider=" + providerCode,
+      active: true
     }]
   }) }}
 
@@ -25,9 +25,9 @@
         "data-module": "moj-server-side-sortable-table"
       },
       head: [
-        { text: "Name", attributes: { "aria-sort": "ascending" } },
+        { text: "Name", attributes: { "aria-sort": "none" } },
         { text: "CRN", attributes: { "aria-sort": "none" } },
-        { text: "Mobile number", attributes: { "aria-sort": "none" } },
+        { text: "Mobile number", attributes: { "aria-sort": "descending" } },
         { text: "Manager", attributes: { "aria-sort": "none" } },
         { text: "Probation delivery unit", attributes: { "aria-sort": "none" } },
         { text: "" }
@@ -39,6 +39,6 @@
       {{ govukPagination({ previous: { href: pagination.prev }, next: { href: pagination.next }, items: pagination.items }) }}
     {% endif %}
   {% else %}
-    <p>All recorded mobile numbers are valid 🎉</p>
+    <p>There are no duplicate mobile numbers 🎉</p>
   {% endif %}
 {% endblock %}

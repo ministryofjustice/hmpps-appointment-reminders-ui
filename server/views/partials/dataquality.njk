@@ -1,0 +1,32 @@
+{% extends "./layout.njk" %}
+{%- from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation -%}
+{%- from "moj/components/notification-badge/macro.njk" import mojNotificationBadge -%}
+{%- from "govuk/components/error-summary/macro.njk" import govukErrorSummary -%}
+{%- from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions -%}
+
+{% set pageTitle = applicationName + " - Data Quality" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContainer %}
+  {{ govukServiceNavigation({
+    navigation: [
+      { href: "#", text: "Sent reminders", href: "/" },
+      { href: "#", html: "Data quality " + (mojNotificationBadge({ text: dataQualityCount }) if dataQualityCount != "0" else ""), active: true }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors %}
+    {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors | toErrorList }) }}
+  {% endif %}
+
+  {{ mojPageHeaderActions({ heading: { text: 'Data quality' } }) }}
+
+  <p>
+    You can use this page to identify and address mobile number recording issues in <strong>{{ providerName }}</strong>,
+    either by contacting the person's manager or following the NDelius link to update their record directly.
+  </p>
+
+  {% block dataQualityResults %}{% endblock %}
+{% endblock %}
