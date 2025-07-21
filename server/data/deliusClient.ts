@@ -21,6 +21,7 @@ export default class DeliusClient extends RestClient {
   }
 
   async getUserAccess(username: string, crns: string[]): Promise<UserAccess> {
+    if (crns.length === 0) return { access: [] }
     return super.post({ path: `/users/${username}/access`, data: crns }, asSystem())
   }
 

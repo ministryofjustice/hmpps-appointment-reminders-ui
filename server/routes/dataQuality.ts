@@ -58,10 +58,8 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
         deliusClient.getInvalidMobileNumberCount(providerCode),
         getData(deliusClient, providerCode, page, sort),
       ])
-      const limitedAccess = await deliusClient.getUserAccess(
-        req.user.username,
-        data.content.map(d => d.crn),
-      )
+      const crns = data.content.map(d => d.crn)
+      const limitedAccess = await deliusClient.getUserAccess(req.user.username, crns)
       res.render(`pages/data-quality/${template}`, {
         dataQualityCount,
         providerCode,
