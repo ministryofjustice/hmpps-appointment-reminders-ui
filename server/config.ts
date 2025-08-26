@@ -123,6 +123,11 @@ export default {
         name: 'London',
         apiKey: get('NOTIFY_N07_API_KEY', 'test', requiredInProduction),
       },
+      kentSurreySussex: {
+        code: 'N57',
+        name: 'Kent, Surrey and Sussex',
+        apiKey: get('NOTIFY_N57_API_KEY', 'test', requiredInProduction),
+      },
       wales: {
         code: 'N03',
         name: 'Wales',
