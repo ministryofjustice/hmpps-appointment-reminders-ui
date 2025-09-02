@@ -47,6 +47,7 @@ generic-service:
       NOTIFY_N03_API_KEY: 'N03_API_KEY'
       NOTIFY_N52_API_KEY: 'N52_API_KEY'
       NOTIFY_N57_API_KEY: 'N57_API_KEY'
+      NOTIFY_N59_API_KEY: 'N59_API_KEY'
     elasticache-redis:
       SESSION_SECRET: 'session_secret'
       REDIS_HOST: 'primary_endpoint_address'
