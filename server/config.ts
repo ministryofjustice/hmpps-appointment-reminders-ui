@@ -128,6 +128,11 @@ export default {
         name: 'Kent, Surrey and Sussex',
         apiKey: get('NOTIFY_N57_API_KEY', 'test', requiredInProduction),
       },
+      southCentral: {
+        code: 'N59',
+        name: 'South Central',
+        apiKey: get('NOTIFY_N59_API_KEY', 'test', requiredInProduction),
+      },
       wales: {
         code: 'N03',
         name: 'Wales',
