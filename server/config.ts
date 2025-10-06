@@ -108,6 +108,11 @@ export default {
   notify: {
     customUrl: get('NOTIFY_N56_API_KEY', false) === false ? 'http://localhost:9090/notifications-api' : undefined,
     providers: {
+      eastMidlands: {
+        code: 'N53',
+        name: 'East Midlands',
+        apiKey: get('NOTIFY_N53_API_KEY', 'test', requiredInProduction),
+      },
       eastOfEngland: {
         code: 'N56',
         name: 'East of England',
@@ -128,10 +133,25 @@ export default {
         name: 'Kent, Surrey and Sussex',
         apiKey: get('NOTIFY_N57_API_KEY', 'test', requiredInProduction),
       },
+      northEast: {
+        code: 'N54',
+        name: 'North East',
+        apiKey: get('NOTIFY_N54_API_KEY', 'test', requiredInProduction),
+      },
+      northWest: {
+        code: 'N51',
+        name: 'North West',
+        apiKey: get('NOTIFY_N51_API_KEY', 'test', requiredInProduction),
+      },
       southCentral: {
         code: 'N59',
         name: 'South Central',
         apiKey: get('NOTIFY_N59_API_KEY', 'test', requiredInProduction),
+      },
+      southWest: {
+        code: 'N58',
+        name: 'South West',
+        apiKey: get('NOTIFY_N58_API_KEY', 'test', requiredInProduction),
       },
       wales: {
         code: 'N03',
