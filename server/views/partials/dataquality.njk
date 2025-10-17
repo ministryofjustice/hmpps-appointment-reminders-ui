@@ -10,7 +10,7 @@
 {% block beforeContainer %}
   {{ govukServiceNavigation({
     navigation: [
-      { href: "#", text: "Sent reminders", href: "/" },
+      { href: "#", text: "Sent reminders", href: "/?provider=" + providerCode },
       { href: "#", html: "Data quality " + (mojNotificationBadge({ text: dataQualityCount }) if dataQualityCount != "0" else ""), active: true }
     ]
   }) }}
@@ -21,7 +21,14 @@
     {{ govukErrorSummary({ titleText: "There is a problem", errorList: errors | toErrorList }) }}
   {% endif %}
 
-  {{ mojPageHeaderActions({ heading: { text: 'Data quality' } }) }}
+  {{ mojPageHeaderActions({
+    heading: { text: 'Data quality' },
+    items: [{
+      text: 'Download as CSV',
+      classes: 'govuk-button--secondary',
+      href: '/data-quality/' + template + '/csv?provider=' + providerCode
+    }]
+  }) }}
 
   <p>
     You can use this page to identify and address mobile number recording issues in <strong>{{ providerName }}</strong>,

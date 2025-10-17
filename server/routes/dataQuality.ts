@@ -1,4 +1,6 @@
 import express, { RequestHandler, Router } from 'express'
+import { DateTimeFormatter, LocalDate } from '@js-joda/core'
+import { Parser } from '@json2csv/plainjs'
 import type { Services } from '../services'
 import config from '../config'
 import { addUrlParameters, asNumber } from '../utils/url'
@@ -16,11 +18,25 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
   )
 
   router.get(
+    '/data-quality/invalid/csv',
+    renderCsv('invalid', async (deliusClient: DeliusClient, providerCode: string) =>
+      deliusClient.getInvalidMobileNumbers(providerCode, 1, null, 100000),
+    ),
+  )
+
+  router.get(
     '/data-quality/missing',
     renderDataQualityList(
       'missing',
       async (deliusClient: DeliusClient, providerCode: string, page: number, sort?: string) =>
         deliusClient.getMissingMobileNumbers(providerCode, page, sort),
+    ),
+  )
+
+  router.get(
+    '/data-quality/missing/csv',
+    renderCsv('missing', async (deliusClient: DeliusClient, providerCode: string) =>
+      deliusClient.getMissingMobileNumbers(providerCode, 1, null, 100000),
     ),
   )
 
@@ -33,6 +49,13 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
     ),
   )
 
+  router.get(
+    '/data-quality/duplicates/csv',
+    renderCsv('duplicates', async (deliusClient: DeliusClient, providerCode: string) =>
+      deliusClient.getDuplicateMobileNumbers(providerCode, 1, null, 100000),
+    ),
+  )
+
   function renderDataQualityList(
     template: string,
     getData: (
@@ -42,7 +65,7 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
       sort?: string,
     ) => Promise<Page<DataQualityEntry>>,
   ): RequestHandler {
-    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    return async (req: express.Request, res: express.Response, _: express.NextFunction) => {
       await auditService.logPageView('DATA_QUALITY', { who: res.locals.user.username, correlationId: req.id })
       const sort = req.query.sort as string | undefined
       const page = asNumber(req.query.page, 1)
@@ -61,6 +84,7 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
       const crns = data.content.map(d => d.crn)
       const limitedAccess = await deliusClient.getUserAccess(req.user.username, crns)
       res.render(`pages/data-quality/${template}`, {
+        template,
         dataQualityCount,
         providerCode,
         providerName: Object.values(config.notify.providers).find(p => p.code === providerCode).name,
@@ -105,6 +129,31 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
           data.page.size,
         ),
       })
+    }
+  }
+
+  function renderCsv(
+    template: string,
+    getData: (deliusClient: DeliusClient, providerCode: string) => Promise<Page<DataQualityEntry>>,
+  ) {
+    return async (req: express.Request, res: express.Response, _: express.NextFunction) => {
+      const providerCode = req.query.provider as string
+      const formatter = DateTimeFormatter.ofPattern('yyyy-MM-dd')
+      const filename = `${template}-mobile-numbers-${LocalDate.now().format(formatter)}.csv`
+
+      const deliusClient = new DeliusClient(authenticationClient)
+      const results = await getData(deliusClient, providerCode)
+      const csvContent = new Parser({
+        fields: [
+          { label: 'CRN', value: 'crn' },
+          { label: 'Name', value: 'name' },
+          { label: 'Manager name', value: 'manager.name' },
+          { label: 'Manager email', value: 'manager.email' },
+          { label: 'Mobile number', value: 'mobileNumber' },
+          { label: 'Probation delivery unit', value: 'probationDeliveryUnit' },
+        ],
+      }).parse(results.content)
+      res.type('text/csv').attachment(filename).send(csvContent)
     }
   }
 

@@ -29,6 +29,25 @@ context('Data quality page', () => {
     cy.get('table thead th:nth-child(2)').should('have.attr', 'aria-sort').should('equal', 'descending')
   })
 
+  it('can download CSV', () => {
+    cy.visit('/data-quality/invalid?provider=N56')
+    cy.get('.moj-page-header-actions__actions .govuk-button')
+      .should('contain.text', 'Download as CSV')
+      .should('be.visible')
+
+    cy.request('/data-quality/invalid/csv?provider=N56').then(response => {
+      expect(response.status).to.eq(200)
+      expect(response.headers['content-type']).to.contain('text/csv')
+      expect(response.body).to.contain(
+        '"CRN","Name","Manager name","Manager email","Mobile number","Probation delivery unit"',
+      )
+      expect(response.body).to.contain(
+        '"E000007","Abdur Test","Robert Test","test@example.com","077440 343074","Manchester South"',
+      )
+      expect(response.body.trim().split('\n')).to.have.length(11)
+    })
+  })
+
   it('cannot access other providers', () => {
     cy.visit('/data-quality/invalid?provider=N99', { failOnStatusCode: false })
     cy.url().should('contain', '/autherror')

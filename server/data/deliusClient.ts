@@ -34,31 +34,46 @@ export default class DeliusClient extends RestClient {
     ).text
   }
 
-  async getInvalidMobileNumbers(providerCode: string, page: number, sort?: string): Promise<Page<DataQualityEntry>> {
+  async getInvalidMobileNumbers(
+    providerCode: string,
+    page: number,
+    sort?: string,
+    size: number = 10,
+  ): Promise<Page<DataQualityEntry>> {
     return super.get(
       {
         path: `/data-quality/${providerCode}/invalid-mobile-numbers`,
-        query: `page=${page - 1}${this.mapSort(sort)}`,
+        query: `page=${page - 1}&size=${size}&${this.mapSort(sort)}`,
       },
       asSystem(),
     )
   }
 
-  async getMissingMobileNumbers(providerCode: string, page: number, sort?: string): Promise<Page<DataQualityEntry>> {
+  async getMissingMobileNumbers(
+    providerCode: string,
+    page: number,
+    sort?: string,
+    size: number = 10,
+  ): Promise<Page<DataQualityEntry>> {
     return super.get(
       {
         path: `/data-quality/${providerCode}/missing-mobile-numbers`,
-        query: `page=${page - 1}${this.mapSort(sort)}`,
+        query: `page=${page - 1}&size=${size}${this.mapSort(sort)}`,
       },
       asSystem(),
     )
   }
 
-  async getDuplicateMobileNumbers(providerCode: string, page: number, sort?: string): Promise<Page<DataQualityEntry>> {
+  async getDuplicateMobileNumbers(
+    providerCode: string,
+    page: number,
+    sort?: string,
+    size: number = 10,
+  ): Promise<Page<DataQualityEntry>> {
     return super.get(
       {
         path: `/data-quality/${providerCode}/duplicate-mobile-numbers`,
-        query: `page=${page - 1}${this.mapSort(sort, `&sort=mobileNumber,desc`)}`,
+        query: `page=${page - 1}&size=${size}${this.mapSort(sort, `&sort=mobileNumber,desc`)}`,
       },
       asSystem(),
     )
