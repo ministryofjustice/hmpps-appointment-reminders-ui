@@ -82,7 +82,9 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
         getData(deliusClient, providerCode, page, sort),
       ])
       const crns = data.content.map(d => d.crn)
-      const limitedAccess = await deliusClient.getUserAccess(req.user.username, crns)
+      const limitedAccess = (await deliusClient.getUserAccess(req.user.username, crns)).access
+        .filter(access => access.userExcluded || access.userRestricted)
+        .map(access => access.crn)
       res.render(`pages/data-quality/${template}`, {
         template,
         dataQualityCount,
@@ -90,12 +92,7 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
         providerName: Object.values(config.notify.providers).find(p => p.code === providerCode).name,
         rows: data.content
           .map(item => {
-            if (
-              limitedAccess.access
-                .filter(access => access.userExcluded || access.userRestricted)
-                .map(access => access.crn)
-                .includes(item.crn)
-            ) {
+            if (limitedAccess.includes(item.crn)) {
               return {
                 name: '*** ***',
                 crn: item.crn,
@@ -142,7 +139,17 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
       const filename = `${template}-mobile-numbers-${LocalDate.now().format(formatter)}.csv`
 
       const deliusClient = new DeliusClient(authenticationClient)
-      const results = await getData(deliusClient, providerCode)
+      const data = await getData(deliusClient, providerCode)
+
+      const crns = data.content.map(d => d.crn)
+      const chunks = Array.from({ length: Math.ceil(crns.length / 500) }, (_v, i) => crns.slice(i * 500, (i + 1) * 500))
+      const limitedAccess = (
+        await Promise.all(chunks.map(async c => (await deliusClient.getUserAccess(req.user.username, c)).access))
+      )
+        .flatMap(item => item)
+        .filter(access => access.userExcluded || access.userRestricted)
+        .map(access => access.crn)
+
       const csvContent = new Parser({
         fields: [
           { label: 'CRN', value: 'crn' },
@@ -152,7 +159,20 @@ export default function dataQualityRoutes(router: Router, { auditService, authen
           { label: 'Mobile number', value: 'mobileNumber' },
           { label: 'Probation delivery unit', value: 'probationDeliveryUnit' },
         ],
-      }).parse(results.content)
+      }).parse(
+        data.content.map(item => {
+          if (limitedAccess.includes(item.crn)) {
+            return {
+              name: '*** ***',
+              crn: item.crn,
+              mobileNumber: '***********',
+              manager: { name: '*** ***', email: null },
+              probationDeliveryUnit: '***',
+            }
+          }
+          return item
+        }),
+      )
       res.type('text/csv').attachment(filename).send(csvContent)
     }
   }
