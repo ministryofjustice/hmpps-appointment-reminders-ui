@@ -163,6 +163,11 @@ export default {
         name: 'West Midlands',
         apiKey: get('NOTIFY_N52_API_KEY', 'test', requiredInProduction),
       },
+      yorkshireHumber: {
+        code: 'N55',
+        name: 'Yorkshire and The Humber',
+        apiKey: get('NOTIFY_N55_API_KEY', 'test', requiredInProduction),
+      },
     },
   },
   sqs: {
