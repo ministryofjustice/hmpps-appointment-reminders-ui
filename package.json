@@ -84,7 +84,7 @@
     "@json2csv/plainjs": "^7.0.6",
     "@ministryofjustice/frontend": "^5.1.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
-    "@ministryofjustice/hmpps-monitoring": "^0.0.2",
+    "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
     "@types/qs": "^6.14.0",
     "agentkeepalive": "^4.6.0",
