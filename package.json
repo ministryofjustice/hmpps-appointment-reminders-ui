@@ -158,6 +158,7 @@
     "wiremock": "^3.13.2"
   },
   "overrides": {
-    "cldr-data-downloader": "1.1.0"
+    "cldr-data-downloader": "^1.1.0",
+    "glob": "^12.0.0"
   }
 }
