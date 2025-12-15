@@ -34,7 +34,7 @@ jobs:
       - uses: actions/download-artifact@v6
         with:
           name: npm_build_artifacts
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@v5
         with:
           path: |
             ./node_modules
