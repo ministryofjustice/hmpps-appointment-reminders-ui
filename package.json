@@ -76,7 +76,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.952.0",
+    "@aws-sdk/client-sqs": "^3.956.0",
     "@js-joda/core": "^5.6.5",
     "@js-joda/locale": "^4.15.2",
     "@js-joda/locale_en": "^4.15.1",
@@ -128,7 +128,7 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
     "@typescript-eslint/parser": "^8.32.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
@@ -136,7 +136,7 @@
     "concurrently": "^9.2.1",
     "cypress": "^15.7.1",
     "cypress-multi-reporters": "^2.0.5",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.27.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
