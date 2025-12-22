@@ -82,7 +82,7 @@
     "@js-joda/locale_en": "^4.15.1",
     "@js-joda/timezone": "^2.22.0",
     "@json2csv/plainjs": "^7.0.6",
-    "@ministryofjustice/frontend": "^5.1.5",
+    "@ministryofjustice/frontend": "^8.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.1",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
