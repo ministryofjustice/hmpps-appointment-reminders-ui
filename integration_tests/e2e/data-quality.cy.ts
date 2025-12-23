@@ -6,8 +6,8 @@ context('Data quality page', () => {
     cy.visit('/')
     Page.verifyOnPage(IndexPage)
 
-    cy.get('#notifications').should('contain.text', '99+')
-    cy.get('#notifications').click()
+    cy.get('.moj-notification-badge').should('contain.text', '99+')
+    cy.get('.moj-notification-badge').click()
     cy.url().should('contain', '/data-quality/invalid?provider=N56')
     cy.get('.moj-sub-navigation__link').eq(0).should('contain.text', 'Invalid mobile numbers (34)')
     cy.get('.moj-sub-navigation__link').eq(1).should('contain.text', 'Missing mobile numbers')
