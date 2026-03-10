@@ -4,9 +4,13 @@ on:
   schedule:
     - cron: "30 5 * * MON-FRI" # Every weekday at 05:30 UTC
 jobs:
-  security-kotlin-trivy-check:
+  security-typescript-trivy-check:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     name: Project security trivy dependency check
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_trivy.yml@v2
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_trivy.yml@v2 # WORKFLOW_VERSION
     with:
       channel_id: probation-integration-notifications
     secrets:

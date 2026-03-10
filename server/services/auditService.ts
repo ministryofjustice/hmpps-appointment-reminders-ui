@@ -1,5 +1,12 @@
 import HmppsAuditClient, { AuditEvent } from '../data/hmppsAuditClient'
 
+export enum Page {
+  EXAMPLE_PAGE = 'EXAMPLE_PAGE',
+  HOME_PAGE = 'HOME_PAGE',
+  NOTIFICATION = 'NOTIFICATION',
+  DATA_QUALITY = 'DATA_QUALITY',
+}
+
 export interface PageViewEventDetails {
   who: string
   subjectId?: string

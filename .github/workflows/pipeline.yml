@@ -20,6 +20,9 @@ concurrency:
 jobs:
   build:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
+    secrets: inherit
+    with:
+      install_command: 'npm run setup'
 
   unit_tests:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
@@ -31,6 +34,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
       - uses: actions/download-artifact@v7
         with:
           name: npm_build_artifacts
@@ -39,7 +44,11 @@ jobs:
           path: |
             ./node_modules
             ~/.cache/Cypress
-          key: ${{ runner.os }}-build-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-node-modules-${{ hashFiles('**/package-lock.json', '!**/node_modules/**') }}
+      - name: npm ci
+        run: |
+          npm ci --no-audit
+          npx cypress install
       - uses: actions/download-artifact@v7
         with:
           name: npm_build_artifacts
@@ -50,8 +59,7 @@ jobs:
       - name: Start service
         run: |
           cp .env.example .env
-          npm run wiremock &
-          npm run dev-server &
+          npm run start:dev &
           timeout 10 sh -c 'until curl -s localhost:3000; do sleep 1; done'
       - name: Run tests
         run: npm run int-test

@@ -7,8 +7,8 @@
 }
 
 .secondary-text {
-  color: $govuk-secondary-text-colour;
-  @include govuk-font-size($size: 16);
+  color: govuk-functional-colour(secondary-text);
+  @include govuk-font(16);
 }
 
 .moj-filter__header {

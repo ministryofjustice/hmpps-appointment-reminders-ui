@@ -5,12 +5,14 @@
   "repository": "git@github.com:ministryofjustice/hmpps-appointment-reminders-ui.git",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky",
-    "build": "node esbuild/esbuild.config.js --build",
-    "build:watch": "node esbuild/esbuild.config.js --build --watch",
-    "dev-server": "node esbuild/esbuild.config.js --dev-server",
-    "start:dev": "concurrently -k -n 'Build,Server,WireMock' 'npm run build:watch' 'npm run dev-server' 'npm run wiremock'",
+    "prepare": "hmpps-precommit-hooks-prepare",
+    "watch-ts": "tsc -w",
+    "build": "node esbuild/esbuild --build",
+    "build:watch": "node esbuild/esbuild --build --watch",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
+    "start:dev": "concurrently -k -n 'Build,WireMock' 'node esbuild/esbuild --watch' 'npm run wiremock'",
+    "start-feature": " node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
+    "start-feature:dev": "node esbuild/esbuild --watch --env feature.env",
     "wiremock": "wiremock --port 9090 --root-dir wiremock --local-response-templating",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
@@ -21,59 +23,12 @@
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist node_modules",
-    "rebuild": "npm run clean && npm i && npm run build"
+    "rebuild": "npm run clean && npm run setup && npm run build",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^24",
     "npm": "^11"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest",
-        {
-          "isolatedModules": true
-        }
-      ]
-    },
-    "collectCoverageFrom": [
-      "server/**/*.{ts,js,jsx,mjs}"
-    ],
-    "testMatch": [
-      "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
-    ],
-    "testEnvironment": "node",
-    "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "test_results/jest/"
-        }
-      ],
-      [
-        "./node_modules/jest-html-reporter",
-        {
-          "outputPath": "test_results/unit-test-reports.html"
-        }
-      ]
-    ],
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "node",
-      "ts"
-    ]
-  },
-  "lint-staged": {
-    "*.{ts,js,css}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.json": [
-      "prettier --write"
-    ]
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1005.0",
@@ -82,7 +37,7 @@
     "@js-joda/locale_en": "^4.15.3",
     "@js-joda/timezone": "^2.23.0",
     "@json2csv/plainjs": "^7.0.6",
-    "@ministryofjustice/frontend": "^8.0.0",
+    "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-monitoring": "^1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^1.1.0",
@@ -98,7 +53,7 @@
     "csrf-sync": "^4.2.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
-    "govuk-frontend": "^5.14.0",
+    "govuk-frontend": "^6.1.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.1",
     "jwt-decode": "^4.0.0",
@@ -113,6 +68,9 @@
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
+    "@ministryofjustice/frontend-types": "1.0.0-alpha.2",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.3",
+    "@ministryofjustice/hmpps-precommit-hooks": "2.0.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
@@ -127,7 +85,7 @@
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
-    "@types/supertest": "^6.0.3",
+    "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.51.0",
     "audit-ci": "^7.1.0",
@@ -136,6 +94,7 @@
     "concurrently": "^9.2.1",
     "cypress": "^15.11.0",
     "cypress-multi-reporters": "^2.0.5",
+    "del": "8.0.1",
     "esbuild": "^0.27.3",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
@@ -162,6 +121,9 @@
     "glob": "^13.0.0",
     "cypress": {
       "qs": "^6.14.1"
+    },
+    "@aws-sdk/xml-builder": {
+      "fast-xml-parser": "^5.4.1"
     }
   }
 }
