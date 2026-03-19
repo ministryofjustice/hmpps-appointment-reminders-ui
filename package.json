@@ -124,6 +124,8 @@
     },
     "@aws-sdk/xml-builder": {
       "fast-xml-parser": "^5.4.1"
-    }
+    },
+    "serialize-javascript": "7.0.3",
+    "diff": "8.0.3"
   }
 }
