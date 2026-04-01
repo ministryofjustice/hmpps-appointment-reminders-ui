@@ -4,6 +4,7 @@
   "compilerOptions": {
     "isolatedModules": true,
     "outDir": "./dist",
+    "rootDir": ".",
     "sourceMap": true,
     "skipLibCheck": true,
     "noEmit": false,
@@ -14,6 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
+    "types": ["node", "jest"],
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
   "exclude": [
