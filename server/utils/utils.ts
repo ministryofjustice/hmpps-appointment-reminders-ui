@@ -1,6 +1,7 @@
 import { DateTimeFormatter, TemporalAccessor, ZonedDateTime, ZoneId } from '@js-joda/core'
-import { Locale } from '@js-joda/locale_en'
 import '@js-joda/timezone'
+import { Locale } from '@js-joda/locale'
+import '@js-joda/locale_en'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
