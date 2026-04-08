@@ -9,7 +9,7 @@ Management interface for monitoring probation appointment SMS reminders.
 
 ### Pre-requisites
 
-You'll need to install :
+You'll need to install:
 
 * [NodeJS](https://nodejs.org/)*
 
