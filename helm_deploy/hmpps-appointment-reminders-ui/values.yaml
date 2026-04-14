@@ -70,3 +70,4 @@ generic-service:
 
 generic-prometheus-alerts:
   targetApplication: hmpps-appointment-reminders-ui
+  businessHoursOnly: true
