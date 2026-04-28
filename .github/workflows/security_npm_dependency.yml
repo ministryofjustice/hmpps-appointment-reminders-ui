@@ -10,7 +10,7 @@ jobs:
       actions: read
       security-events: write
     name: Project security npm dependency check
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_npm_dependency.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_npm_dependency.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     with:
       channel_id: probation-integration-notifications
     secrets:

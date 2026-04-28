@@ -24,13 +24,13 @@ concurrency:
 
 jobs:
   build:
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     secrets: inherit
     with:
       install_command: 'npm run setup'
 
   unit_tests:
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     needs: build
 
   integration_tests:
@@ -38,7 +38,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: .nvmrc
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -80,7 +80,7 @@ jobs:
     strategy:
       matrix:
         environment: [dev, preprod, prod]
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     secrets:
       HMPPS_SRE_SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SRE_SLACK_BOT_TOKEN }}
     with:
@@ -88,7 +88,7 @@ jobs:
 
   docker_build:
     if: github.ref_name == 'main' || github.event_name == 'workflow_dispatch'
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
@@ -102,7 +102,7 @@ jobs:
       - docker_build
       - integration_tests
       - unit_tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
     secrets: inherit
     with:
       environment: dev
@@ -114,7 +114,7 @@ jobs:
      - docker_build
      - integration_tests
      - unit_tests
-   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
    secrets: inherit
    with:
      environment: preprod
@@ -126,7 +126,7 @@ jobs:
      - docker_build
      - deploy_dev
      - deploy_preprod
-   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@8de783c7b6dc61ad8ba384924dc1fe93098d9995 # v2.13.1
+   uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@607c82f9fa98d1c35286644d7d70f13c50c4316b # v2.13.2
    secrets: inherit
    with:
      environment: prod
