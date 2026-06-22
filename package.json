@@ -31,7 +31,7 @@
     "npm": "^11"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1067.0",
+    "@aws-sdk/client-sqs": "^3.1068.0",
     "@js-joda/core": "^6.0.1",
     "@js-joda/locale": "^5.1.0",
     "@js-joda/locale_en": "^5.1.0",
@@ -41,8 +41,8 @@
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-rest-client": "^2.1.0",
+    "@ministryofjustice/hmpps-azure-telemetry": "1.0.0",
     "@types/qs": "^6.15.1",
-    "applicationinsights": "^2.9.8",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
     "compression": "^1.8.1",
@@ -106,7 +106,10 @@
     "wiremock": "^3.13.2"
   },
   "overrides": {
-    "serialize-javascript": "7.0.5",
-    "diff": "8.0.3"
+    "diff": "8.0.3",
+    "@opentelemetry/core": "2.8.0",
+    "form-date": "^4.0.6",
+    "serialize-javascript": "^7.0.3",
+    "js-yaml": "4.2.0"
   }
 }

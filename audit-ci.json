@@ -2,5 +2,7 @@
   "low": true,
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
-  "allowlist": ["CVE-2026-24001"]
+  "allowlist": [
+    "CVE-2026-24001"
+  ]
 }

@@ -4,7 +4,6 @@
  */
 import { AuthenticationClient, InMemoryTokenStore } from '@ministryofjustice/hmpps-auth-clients'
 import RedisTokenStore from './tokenStore/redisTokenStore'
-import { initialiseAppInsights, buildAppInsightsClient } from '../utils/azureAppInsights'
 import applicationInfoSupplier from '../applicationInfo'
 import { createRedisClient } from './redisClient'
 import config from '../config'
@@ -12,8 +11,6 @@ import HmppsAuditClient from './hmppsAuditClient'
 import logger from '../../logger'
 
 const applicationInfo = applicationInfoSupplier()
-initialiseAppInsights()
-buildAppInsightsClient(applicationInfo)
 
 export const dataAccess = () => ({
   applicationInfo,
