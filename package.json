@@ -106,10 +106,10 @@
     "wiremock": "^3.13.2"
   },
   "overrides": {
-    "diff": "8.0.3",
-    "@opentelemetry/core": "2.8.0",
+    "diff": "^8.0.3",
+    "@opentelemetry/core": "^2.8.0",
     "form-date": "^4.0.6",
     "serialize-javascript": "^7.0.3",
-    "js-yaml": "4.2.0"
+    "js-yaml": "^4.2.0"
   }
 }
