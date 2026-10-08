@@ -3,6 +3,12 @@
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
   "allowlist": [
-    "CVE-2026-24001"
+    {
+      "braces": {
+        "active": true,
+        "expiry": "2026-12-01",
+        "notes": "No untrusted brace expansion"
+      }
+    }
   ]
 }
