@@ -87,10 +87,10 @@
     "@types/supertest": "^7.2.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
-    "concurrently": "10.0.5",
+    "concurrently": "^10.0.5",
     "cypress": "^15.20.0",
     "cypress-multi-reporters": "^2.0.5",
-    "del": "8.0.1",
+    "del": "^8.0.1",
     "esbuild": "^0.28.2",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
@@ -111,6 +111,7 @@
     "@opentelemetry/core": "^2.8.0",
     "form-date": "^4.0.6",
     "serialize-javascript": "^7.0.3",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^4.2.0",
+    "shell-quote": "^1.11.0"
   }
 }
