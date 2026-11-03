@@ -41,7 +41,7 @@
       "response": {
         "status": 200,
         "jsonBody": {
-          "access_token": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX25hbWUiOiJVU0VSMSIsIm5hbWUiOiJUZXN0Iiwic2NvcGUiOlsicmVhZCJdLCJhdXRoX3NvdXJjZSI6ImRlbGl1cyIsImF1dGhvcml0aWVzIjpbIlJPTEVfQVBQT0lOVE1FTlRfUkVNSU5ERVJTIl0sImp0aSI6IjgzYjUwYTEwLWNjYTYtNDFkYi05ODVmLWU4N2VmYjMwM2RkYiIsImNsaWVudF9pZCI6ImNsaWVudGlkIiwiaWF0IjoxNzAxOTUxMzY4LCJleHAiOjk5OTk5OTk5OTl9.",
+          "access_token": "eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VyX25hbWUiOiJVU0VSMSIsIm5hbWUiOiJUZXN0Iiwic2NvcGUiOlsicmVhZCJdLCJhdXRoX3NvdXJjZSI6ImRlbGl1cyIsImF1dGhvcml0aWVzIjpbIlJPTEVfQVBQT0lOVE1FTlRfUkVNSU5ERVJTIl0sImp0aSI6IjgzYjUwYTEwLWNjYTYtNDFkYi05ODVmLWU4N2VmYjMwM2RkYiIsImNsaWVudF9pZCI6ImNsaWVudGlkIiwiaWF0IjoxNzAxOTUxMzY4LCJleHAiOjk5OTk5OTk5OTksInVzZXJfdXVpZCI6ImQ3N2VkMzg2LTViMGItNDg2OS04MmEwLTljYmU0NzE5YWMxMCJ9.",
           "token_type": "bearer",
           "user_name": "USER1",
           "expires_in": 599,

@@ -12,10 +12,12 @@ export default function setUpCurrentUser() {
         name,
         user_id: userId,
         authorities: roles = [],
+        user_uuid: userUuid,
       } = jwtDecode(res.locals.user.token) as {
         name?: string
         user_id?: string
         authorities?: string[]
+        user_uuid?: string
       }
 
       res.locals.user = {
@@ -24,6 +26,7 @@ export default function setUpCurrentUser() {
         name,
         displayName: convertToTitleCase(name),
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
+        userUuid,
       }
 
       if (res.locals.user.authSource === 'nomis') {
