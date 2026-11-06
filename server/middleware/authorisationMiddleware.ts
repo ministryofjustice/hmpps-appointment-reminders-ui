@@ -12,7 +12,6 @@ export default function authorisationMiddleware(requiredRoles: string[] = []): R
         logger.error('User is not authorised to access this')
         return res.redirect('/authError')
       }
-      
       return next()
     }
 
