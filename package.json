@@ -88,7 +88,7 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "concurrently": "^10.0.7",
-    "cypress": "^15.20.0",
+    "cypress": "^16.2.1",
     "cypress-multi-reporters": "^2.1.0",
     "del": "^8.0.1",
     "esbuild": "^0.28.2",
